@@ -4,13 +4,13 @@
     "module": "CommonJS",
     "moduleResolution": "node", //모듈 해석 방법 설정: 'node' (Node.js)
     "esModuleInterop": true,
-    "jsx": "react",
     "strict": true,
     "sourceMap": true,
     "allowJs": true,
     "checkJs": true,
     "outDir": "./dist",
     "rootDir": "./src",
+    // 절대 경로설정
     "baseUrl": "./src",
     "paths": {
       "@utils": ["./utils"]
