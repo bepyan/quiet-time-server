@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "moduleResolution": "node", //모듈 해석 방법 설정: 'node' (Node.js)
+    "esModuleInterop": true,
+    "jsx": "react"
+  }
+}
