@@ -1,11 +1,13 @@
 {
   "packageManager": "yarn@3.1.1",
   "devDependencies": {
+    "@notionhq/client": "^0.4.11",
     "@types/express": "^4.17.13",
     "@types/node": "^16.11.13",
     "@yarnpkg/pnpify": "^3.1.1-rc.8",
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "iconv-lite": "^0.6.3",
     "node-cron": "^3.0.0",
