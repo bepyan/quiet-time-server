@@ -6,7 +6,7 @@ declare module "@types" {
 
   interface ISubscriptNotionDTO {
     name: string;
-    notions: INotion[];
+    notion: INotion;
   }
 
   /* ---------------- Model ---------------- */

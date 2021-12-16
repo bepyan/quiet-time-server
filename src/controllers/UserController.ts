@@ -17,12 +17,22 @@ export const create: RequestHandler[] = [
   },
 ];
 
-export const subscriptNotion: RequestHandler = async (req, res) => {
-  const body: ISubscriptNotionDTO = req.body;
+export const subscriptNotion: RequestHandler[] = [
+  body("name").notEmpty(),
+  body("notion").notEmpty(),
+  validatorErrorChecker,
+  async (req, res) => {
+    const { name, notion }: ISubscriptNotionDTO = req.body;
 
-  const user = await new UserModel(body).save();
-  res.send(user);
-};
+    const user = await UserModel.updateOne(
+      { name },
+      {
+        $push: { notions: notion },
+      }
+    );
+    res.send(user);
+  },
+];
 
 /* ---------------- GET ---------------- */
 

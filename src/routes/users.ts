@@ -1,5 +1,6 @@
 import { UserController } from "controllers";
 import express from "express";
+import { validatorErrorChecker } from "middlewares";
 
 const router = express.Router();
 
