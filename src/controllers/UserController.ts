@@ -1,24 +1,21 @@
 import { ISubscriptNotionDTO, IUserDTO } from "@types";
 import { RequestHandler } from "express";
+import { body } from "express-validator";
+import { validatorErrorChecker } from "middlewares";
 import { UserModel } from "models";
 
 /* ---------------- POST ---------------- */
 
-export const create: RequestHandler = async (req, res) => {
-  // 유효성 검사
+export const create: RequestHandler[] = [
+  body("name").notEmpty(),
+  validatorErrorChecker,
+  async (req, res) => {
+    const body: IUserDTO = req.body;
 
-  // body 설정
-  const body: IUserDTO = req.body;
-
-  if (!body?.name) {
-    res.status(400).json({ message: "body error" });
-    return;
-  }
-
-  // 응답 전송
-  const user = await new UserModel(body).save();
-  res.send(user);
-};
+    const user = await new UserModel(body).save();
+    res.send(user);
+  },
+];
 
 export const subscriptNotion: RequestHandler = async (req, res) => {
   const body: ISubscriptNotionDTO = req.body;

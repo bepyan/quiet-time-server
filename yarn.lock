@@ -1448,6 +1448,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"express-validator@npm:^6.14.0":
+  version: 6.14.0
+  resolution: "express-validator@npm:6.14.0"
+  dependencies:
+    lodash: ^4.17.21
+    validator: ^13.7.0
+  checksum: e43ba1f18a4f02d784e44e13b1b43269a61f9d9283f31e51c230ff6d31591b3d67ad89e444a0941c0688bfd220049087e606bb61569c0eb8df2f118b866cfb43
+  languageName: node
+  linkType: hard
+
 "express@npm:^4.17.1":
   version: 4.17.1
   resolution: "express@npm:4.17.1"
@@ -2208,7 +2218,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15":
+"lodash@npm:^4.17.15, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -3176,6 +3186,7 @@ __metadata:
     cheerio: ^1.0.0-rc.10
     dotenv: ^10.0.0
     express: ^4.17.1
+    express-validator: ^6.14.0
     iconv-lite: ^0.6.3
     mongoose: ^6.1.2
     node-cron: ^3.0.0
@@ -3787,6 +3798,13 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: c81095493225ecfc28add49c106ca4f09cdf56bc66731aa8dabc2edbbccb1e1bfe2de6a115e5c6a380d3ea166d1636410b62ef216bb07b3feb1cfde1d95d5080
+  languageName: node
+  linkType: hard
+
+"validator@npm:^13.7.0":
+  version: 13.7.0
+  resolution: "validator@npm:13.7.0"
+  checksum: 2b83283de1222ca549a7ef57f46e8d49c6669213348db78b7045bce36a3b5843ff1e9f709ebf74574e06223461ee1f264f8cc9a26a0060a79a27de079d8286ef
   languageName: node
   linkType: hard
 

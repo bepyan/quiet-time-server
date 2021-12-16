@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cheerio", "npm:1.0.0-rc.10"],
             ["dotenv", "npm:10.0.0"],
             ["express", "npm:4.17.1"],
+            ["express-validator", "npm:6.14.0"],
             ["iconv-lite", "npm:0.6.3"],
             ["mongoose", "npm:6.1.2"],
             ["node-cron", "npm:3.0.0"],
@@ -1773,6 +1774,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["type-is", "npm:1.6.18"],
             ["utils-merge", "npm:1.0.1"],
             ["vary", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["express-validator", [
+        ["npm:6.14.0", {
+          "packageLocation": "./.yarn/cache/express-validator-npm-6.14.0-34a160ed56-e43ba1f18a.zip/node_modules/express-validator/",
+          "packageDependencies": [
+            ["express-validator", "npm:6.14.0"],
+            ["lodash", "npm:4.17.21"],
+            ["validator", "npm:13.7.0"]
           ],
           "linkType": "HARD",
         }]
@@ -3693,6 +3705,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cheerio", "npm:1.0.0-rc.10"],
             ["dotenv", "npm:10.0.0"],
             ["express", "npm:4.17.1"],
+            ["express-validator", "npm:6.14.0"],
             ["iconv-lite", "npm:0.6.3"],
             ["mongoose", "npm:6.1.2"],
             ["node-cron", "npm:3.0.0"],
@@ -4374,6 +4387,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/utils-merge-npm-1.0.1-363bbdfbca-c810954932.zip/node_modules/utils-merge/",
           "packageDependencies": [
             ["utils-merge", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["validator", [
+        ["npm:13.7.0", {
+          "packageLocation": "./.yarn/cache/validator-npm-13.7.0-624277e841-2b83283de1.zip/node_modules/validator/",
+          "packageDependencies": [
+            ["validator", "npm:13.7.0"]
           ],
           "linkType": "HARD",
         }]
