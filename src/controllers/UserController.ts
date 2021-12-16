@@ -10,8 +10,6 @@ export const create: RequestHandler = async (req, res) => {
   // body 설정
   const body: IUserDTO = req.body;
 
-  console.log("create user", body);
-
   if (!body?.name) {
     res.status(400).json({ message: "body error" });
     return;

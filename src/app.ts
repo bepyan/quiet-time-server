@@ -1,19 +1,16 @@
 import "dotenv/config";
 import express from "express";
-import router from "./routes";
-import mongoose from "mongoose";
+import { loadDB } from "loaders";
+import routers from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 1234;
 
-mongoose.Promise = global.Promise;
-mongoose
-  .connect(process.env.MONGOOSE_URI!)
-  .then(() => console.log("Successfully connected to mongodb"))
-  .catch((e) => console.error(e));
+loadDB();
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/api", router);
+app.use("/api", routers);
 
 app.listen(PORT, () => {
   console.log(`
