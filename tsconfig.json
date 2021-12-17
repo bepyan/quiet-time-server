@@ -9,18 +9,7 @@
     "allowJs": true,
     "checkJs": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    // 절대 경로설정
-    "baseUrl": "./src",
-    "paths": {
-      "@controllers": ["./controllers"],
-      "@loaders": ["./loaders"],
-      "@middlewares": ["./middlewares"],
-      "@models": ["./models"],
-      "@routes": ["./routes"],
-      "@services": ["./services"],
-      "@utils": ["./utils"]
-    }
+    "rootDir": "./src"
   },
   "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts"]
 }

@@ -50,7 +50,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node-schedule", "npm:2.1.0"],
             ["nodemon", "npm:2.0.15"],
             ["ts-node", "virtual:1a1b5381ee45770e00f66fbd0af66925f19bb2a3dc5dd62802d09a8d232d516c26101352991bc4ec422aab3383ebb8ec646e0c57b56d7ece53cb118c43942bc2#npm:10.4.0"],
-            ["tsconfig-paths", "npm:3.12.0"],
             ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"]
           ],
           "linkType": "SOFT",
@@ -328,15 +327,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-http-cache-semantics-npm-4.0.1-90863c7a3e-1048aacf62.zip/node_modules/@types/http-cache-semantics/",
           "packageDependencies": [
             ["@types/http-cache-semantics", "npm:4.0.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/json5", [
-        ["npm:0.0.29", {
-          "packageLocation": "./.yarn/cache/@types-json5-npm-0.0.29-f63a7916bd-e60b153664.zip/node_modules/@types/json5/",
-          "packageDependencies": [
-            ["@types/json5", "npm:0.0.29"]
           ],
           "linkType": "HARD",
         }]
@@ -2595,16 +2585,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["json5", [
-        ["npm:1.0.1", {
-          "packageLocation": "./.yarn/cache/json5-npm-1.0.1-647fc8794b-e76ea23dbb.zip/node_modules/json5/",
-          "packageDependencies": [
-            ["json5", "npm:1.0.1"],
-            ["minimist", "npm:1.2.5"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["kareem", [
         ["npm:2.3.2", {
           "packageLocation": "./.yarn/cache/kareem-npm-2.3.2-b3c6b60e2e-61ee3adb27.zip/node_modules/kareem/",
@@ -3587,7 +3567,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node-schedule", "npm:2.1.0"],
             ["nodemon", "npm:2.0.15"],
             ["ts-node", "virtual:1a1b5381ee45770e00f66fbd0af66925f19bb2a3dc5dd62802d09a8d232d516c26101352991bc4ec422aab3383ebb8ec646e0c57b56d7ece53cb118c43942bc2#npm:10.4.0"],
-            ["tsconfig-paths", "npm:3.12.0"],
             ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"]
           ],
           "linkType": "SOFT",
@@ -4081,15 +4060,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["strip-bom", [
-        ["npm:3.0.0", {
-          "packageLocation": "./.yarn/cache/strip-bom-npm-3.0.0-71e8f81ff9-8d50ff27b7.zip/node_modules/strip-bom/",
-          "packageDependencies": [
-            ["strip-bom", "npm:3.0.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["strip-json-comments", [
         ["npm:2.0.1", {
           "packageLocation": "./.yarn/cache/strip-json-comments-npm-2.0.1-e7883b2d04-1074ccb632.zip/node_modules/strip-json-comments/",
@@ -4246,19 +4216,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/swc__wasm",
             "@types/typescript",
             "typescript"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["tsconfig-paths", [
-        ["npm:3.12.0", {
-          "packageLocation": "./.yarn/cache/tsconfig-paths-npm-3.12.0-b78aadfb3f-4999ec6cd1.zip/node_modules/tsconfig-paths/",
-          "packageDependencies": [
-            ["tsconfig-paths", "npm:3.12.0"],
-            ["@types/json5", "npm:0.0.29"],
-            ["json5", "npm:1.0.1"],
-            ["minimist", "npm:1.2.5"],
-            ["strip-bom", "npm:3.0.0"]
           ],
           "linkType": "HARD",
         }]
