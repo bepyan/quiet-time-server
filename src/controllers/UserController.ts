@@ -31,4 +31,25 @@ export const subscriptNotion: RequestHandler[] = [
   },
 ];
 
+export const unSubscriptNotion: RequestHandler[] = [
+  body("name").notEmpty(),
+  body("notion").notEmpty(),
+  validatorErrorChecker,
+  async (req, res) => {
+    const user = await UserService.delelteNotion(req.body);
+    res.send(user);
+  },
+];
+
 /* ---------------- UPDATE ---------------- */
+
+/* ---------------- DELETE ---------------- */
+
+export const deleteUser: RequestHandler[] = [
+  body("name").notEmpty(),
+  validatorErrorChecker,
+  async (req, res) => {
+    const user = await UserService.deleteUser(req.body.name);
+    res.send(user);
+  },
+];
