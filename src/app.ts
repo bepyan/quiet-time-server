@@ -5,7 +5,7 @@ import { loadDB, load_QTConent_CronJob } from "./loaders";
 import { errorResponser, errorLogger } from "./middlewares";
 
 const app = express();
-const PORT = process.env.PORT || 1234;
+const PORT = process.env.PORT || 5000;
 
 loadDB();
 load_QTConent_CronJob();

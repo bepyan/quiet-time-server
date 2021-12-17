@@ -29,7 +29,7 @@ jobs:
           healthcheck: "https://quiet-time-server.herokuapp.com/health"
           dontuseforce: "true"
           justlogin: "true"
-          procfile: "web: yarn start"
+          procfile: "web:yarn start"
         env:
           HD_PORT: ${{secrets.PORT}}
           HD_MONGOOSE_URI: ${{secrets.MONGOOSE_URI}}
