@@ -30,7 +30,7 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node --files src/app.ts",
-    "start": "npm i -g pm2 && yarn build && yarn serve",
+    "start": "yarn install && yarn build && yarn serve",
     "build": "rm -rf ./dist && tsc -p .",
     "serve": "node dist/app.js"
   }
