@@ -92,6 +92,6 @@ const crawler = {
 
 export type CrawlerKey = keyof typeof crawler;
 
-export const parse = (key: CrawlerKey) => {
-  return crawler[key]();
+export const parse = async (key: CrawlerKey) => {
+  return await crawler[key]();
 };

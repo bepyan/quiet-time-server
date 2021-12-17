@@ -9,6 +9,7 @@ export const UserModel = mongoose.model<IUser>(
       {
         key: String,
         database_id: String,
+        contentType: String,
       },
     ],
     create_date: { type: Date, default: Date.now },

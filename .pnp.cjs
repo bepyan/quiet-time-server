@@ -38,6 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@notionhq/client", "npm:0.4.11"],
             ["@types/express", "npm:4.17.13"],
             ["@types/node", "npm:16.11.13"],
+            ["@types/node-schedule", "npm:1.3.2"],
             ["@yarnpkg/pnpify", "npm:3.1.1-rc.8"],
             ["axios", "npm:0.24.0"],
             ["cheerio", "npm:1.0.0-rc.10"],
@@ -46,7 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express-validator", "npm:6.14.0"],
             ["iconv-lite", "npm:0.6.3"],
             ["mongoose", "npm:6.1.2"],
-            ["node-cron", "npm:3.0.0"],
+            ["node-schedule", "npm:2.1.0"],
             ["nodemon", "npm:2.0.15"],
             ["ts-node", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:10.4.0"],
             ["tsconfig-paths", "npm:3.12.0"],
@@ -382,6 +383,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node-fetch", "npm:2.5.12"],
             ["@types/node", "npm:16.11.13"],
             ["form-data", "npm:3.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/node-schedule", [
+        ["npm:1.3.2", {
+          "packageLocation": "./.yarn/cache/@types-node-schedule-npm-1.3.2-7b6359abf3-6fbe54106d.zip/node_modules/@types/node-schedule/",
+          "packageDependencies": [
+            ["@types/node-schedule", "npm:1.3.2"],
+            ["@types/node", "npm:16.11.13"]
           ],
           "linkType": "HARD",
         }]
@@ -1311,6 +1322,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/create-require-npm-1.1.1-839884ca2e-a9a1503d43.zip/node_modules/create-require/",
           "packageDependencies": [
             ["create-require", "npm:1.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["cron-parser", [
+        ["npm:3.5.0", {
+          "packageLocation": "./.yarn/cache/cron-parser-npm-3.5.0-6fc3846be8-80096ac1c3.zip/node_modules/cron-parser/",
+          "packageDependencies": [
+            ["cron-parser", "npm:3.5.0"],
+            ["is-nan", "npm:1.3.2"],
+            ["luxon", "npm:1.28.0"]
           ],
           "linkType": "HARD",
         }]
@@ -2458,6 +2480,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["is-nan", [
+        ["npm:1.3.2", {
+          "packageLocation": "./.yarn/cache/is-nan-npm-1.3.2-a087d31a28-5dfadcef6a.zip/node_modules/is-nan/",
+          "packageDependencies": [
+            ["is-nan", "npm:1.3.2"],
+            ["call-bind", "npm:1.0.2"],
+            ["define-properties", "npm:1.1.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["is-npm", [
         ["npm:5.0.0", {
           "packageLocation": "./.yarn/cache/is-npm-npm-5.0.0-2758bcd54b-9baff02b0c.zip/node_modules/is-npm/",
@@ -2618,6 +2651,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["long-timeout", [
+        ["npm:0.1.1", {
+          "packageLocation": "./.yarn/cache/long-timeout-npm-0.1.1-229e1d81ad-48668e5362.zip/node_modules/long-timeout/",
+          "packageDependencies": [
+            ["long-timeout", "npm:0.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["lowercase-keys", [
         ["npm:1.0.1", {
           "packageLocation": "./.yarn/cache/lowercase-keys-npm-1.0.1-0979e653b8-4d04502659.zip/node_modules/lowercase-keys/",
@@ -2640,6 +2682,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["lru-cache", "npm:6.0.0"],
             ["yallist", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["luxon", [
+        ["npm:1.28.0", {
+          "packageLocation": "./.yarn/cache/luxon-npm-1.28.0-51c0607a71-5250cb9f13.zip/node_modules/luxon/",
+          "packageDependencies": [
+            ["luxon", "npm:1.28.0"]
           ],
           "linkType": "HARD",
         }]
@@ -2898,25 +2949,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["moment", [
-        ["npm:2.29.1", {
-          "packageLocation": "./.yarn/cache/moment-npm-2.29.1-787d9fdafd-1e14d5f422.zip/node_modules/moment/",
-          "packageDependencies": [
-            ["moment", "npm:2.29.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["moment-timezone", [
-        ["npm:0.5.34", {
-          "packageLocation": "./.yarn/cache/moment-timezone-npm-0.5.34-e4fe2d01f6-12a1d3d52e.zip/node_modules/moment-timezone/",
-          "packageDependencies": [
-            ["moment-timezone", "npm:0.5.34"],
-            ["moment", "npm:2.29.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["mongodb", [
         ["npm:4.2.2", {
           "packageLocation": "./.yarn/cache/mongodb-npm-4.2.2-5d828ca7b9-645cc8889e.zip/node_modules/mongodb/",
@@ -3019,16 +3051,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["node-cron", [
-        ["npm:3.0.0", {
-          "packageLocation": "./.yarn/cache/node-cron-npm-3.0.0-d2906273d7-acae07d835.zip/node_modules/node-cron/",
-          "packageDependencies": [
-            ["node-cron", "npm:3.0.0"],
-            ["moment-timezone", "npm:0.5.34"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["node-fetch", [
         ["npm:2.6.6", {
           "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.6-056db6b778-ee8290626b.zip/node_modules/node-fetch/",
@@ -3054,6 +3076,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["semver", "npm:7.3.5"],
             ["tar", "npm:6.1.11"],
             ["which", "npm:2.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["node-schedule", [
+        ["npm:2.1.0", {
+          "packageLocation": "./.yarn/cache/node-schedule-npm-2.1.0-eda30fe9eb-e457e76e63.zip/node_modules/node-schedule/",
+          "packageDependencies": [
+            ["node-schedule", "npm:2.1.0"],
+            ["cron-parser", "npm:3.5.0"],
+            ["long-timeout", "npm:0.1.1"],
+            ["sorted-array-functions", "npm:1.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -3700,6 +3734,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@notionhq/client", "npm:0.4.11"],
             ["@types/express", "npm:4.17.13"],
             ["@types/node", "npm:16.11.13"],
+            ["@types/node-schedule", "npm:1.3.2"],
             ["@yarnpkg/pnpify", "npm:3.1.1-rc.8"],
             ["axios", "npm:0.24.0"],
             ["cheerio", "npm:1.0.0-rc.10"],
@@ -3708,7 +3743,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express-validator", "npm:6.14.0"],
             ["iconv-lite", "npm:0.6.3"],
             ["mongoose", "npm:6.1.2"],
-            ["node-cron", "npm:3.0.0"],
+            ["node-schedule", "npm:2.1.0"],
             ["nodemon", "npm:2.0.15"],
             ["ts-node", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:10.4.0"],
             ["tsconfig-paths", "npm:3.12.0"],
@@ -3932,6 +3967,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["agent-base", "npm:6.0.2"],
             ["debug", "virtual:72d46d4b8165804b5935c946809d705c2ef8745b53db4c71d337aa3a4c7c5fb619e2ea9e1493456d326dcc840e7bc7783bd6186ab0a771946b420c810bcd3b6f#npm:4.3.3"],
             ["socks", "npm:2.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["sorted-array-functions", [
+        ["npm:1.3.0", {
+          "packageLocation": "./.yarn/cache/sorted-array-functions-npm-1.3.0-19f7959640-673fd39ca3.zip/node_modules/sorted-array-functions/",
+          "packageDependencies": [
+            ["sorted-array-functions", "npm:1.3.0"]
           ],
           "linkType": "HARD",
         }]

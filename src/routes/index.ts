@@ -6,7 +6,7 @@ import users from "./users";
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  res.send("welcome!");
+  res.json({ message: "welcome!" });
 });
 
 router.use("/bible", bible);

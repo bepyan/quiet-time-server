@@ -1,3 +1,5 @@
+import { CrawlerKey } from "utils/Crawler";
+
 declare module "@types" {
   /* ---------------- DTO ---------------- */
   interface IUserDTO {
@@ -21,5 +23,6 @@ declare module "@types" {
   interface INotion {
     key: string;
     database_id: string;
+    contentType: CrawlerKey;
   }
 }
