@@ -26,8 +26,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "quiet-time-server"
           heroku_email: "bepyan@naver.com"
-          healthcheck: "https://quiet-time-server.herokuapp.com/health"
-          dontuseforce: "true"
           procfile: "web:yarn start"
         env:
           HD_PORT: ${{secrets.PORT}}
