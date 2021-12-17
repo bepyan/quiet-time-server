@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "quiet-server",
-      script: "./dist/app.js",
+      script: "dist/app.js",
       instances: 1,
       exec_mode: "fork",
       merge_logs: true,
