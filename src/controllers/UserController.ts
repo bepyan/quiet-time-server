@@ -4,6 +4,20 @@ import { body } from "express-validator";
 import { validatorErrorChecker } from "middlewares";
 import { UserModel } from "models";
 
+/* ---------------- GET ---------------- */
+
+export const findAll: RequestHandler = (req, res) => {
+  UserModel.find()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ message: err.message || "Retrieve document failure." });
+    });
+};
+
 /* ---------------- POST ---------------- */
 
 export const create: RequestHandler[] = [
@@ -26,26 +40,10 @@ export const subscriptNotion: RequestHandler[] = [
 
     const user = await UserModel.updateOne(
       { name },
-      {
-        $push: { notions: notion },
-      }
+      { $push: { notions: notion } }
     );
     res.send(user);
   },
 ];
-
-/* ---------------- GET ---------------- */
-
-export const findAll: RequestHandler = (req, res) => {
-  UserModel.find()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: err.message || "Retrieve document failure." });
-    });
-};
 
 /* ---------------- UPDATE ---------------- */

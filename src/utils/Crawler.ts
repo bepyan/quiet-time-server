@@ -49,10 +49,14 @@ const crawler = {
           };
         })
         .toArray(),
-      commentaries: $commentary(".bible")
-        .children()
-        .map((_, elem) => $(elem).text().trim())
-        .toArray(),
+      commentaries: [
+        ...$commentary(".bible")
+          .children()
+          .map((_, elem) => $(elem).html())
+          .toArray()
+          .flatMap((text) => text.split("<br>")),
+        "",
+      ],
     };
   },
 
@@ -61,7 +65,12 @@ const crawler = {
 
     return {
       title: $(".bible_text").text().trim(),
-      range: $("#mainView_2 .bibleinfo_box").text().trim(),
+      range: $("#mainView_2 .bibleinfo_box")
+        .text()
+        .trim()
+        .split(" ")
+        .slice(2, 6)
+        .join(" "),
       date: toYMDD(),
       verses: $(".body_list")
         .children()
@@ -72,16 +81,17 @@ const crawler = {
         .toArray(),
       commentaries: $(".body_cont")
         .children()
-        .map((_, elem) => {
-          return $(elem).text().trim();
-        })
-        .toArray(),
+        .map((_, elem) => $(elem).html())
+        .toArray()
+        .flatMap((text) => text.split("<br>").map((v) => v.trim())),
     };
   },
 };
 
 /* ---------------- export ---------------- */
 
-export const parse = (key: keyof typeof crawler) => {
+export type CrawlerKey = keyof typeof crawler;
+
+export const parse = (key: CrawlerKey) => {
   return crawler[key]();
 };

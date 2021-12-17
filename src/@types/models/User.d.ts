@@ -2,6 +2,7 @@ declare module "@types" {
   /* ---------------- DTO ---------------- */
   interface IUserDTO {
     name: string;
+    notions?: INotion[];
   }
 
   interface ISubscriptNotionDTO {
