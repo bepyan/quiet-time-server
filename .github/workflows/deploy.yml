@@ -19,8 +19,6 @@ jobs:
           node-version: "16"
       - name: install dependencies
         run: yarn
-      - name: build
-        run: yarn dev
       - name: deploy to heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
