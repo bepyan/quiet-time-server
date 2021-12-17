@@ -1,3 +1,4 @@
+import { asyncErrorCatcher } from "@middlewares";
 import { CrawlerService } from "@services";
 import express from "express";
 
@@ -8,22 +9,20 @@ router.use("/", (req, res, next) => {
   next();
 });
 
-router.get("/생명의삶", async (req, res) => {
-  try {
+router.get(
+  "/생명의삶",
+  asyncErrorCatcher(async (req, res) => {
     const content = await CrawlerService.parse("생명의삶");
     res.send(content);
-  } catch (e) {
-    res.status(500).send(e);
-  }
-});
+  })
+);
 
-router.get("/매일성경", async (req, res) => {
-  try {
+router.get(
+  "/매일성경",
+  asyncErrorCatcher(async (req, res) => {
     const content = await CrawlerService.parse("매일성경");
     res.send(content);
-  } catch (e) {
-    res.status(500).send(e);
-  }
-});
+  })
+);
 
 export default router;

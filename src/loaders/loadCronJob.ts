@@ -5,7 +5,7 @@ import { NotionService, UserService } from "@services";
 
 export const testCronJob = () => {
   schedule.scheduleJob("00 00 05 * * 0-6", () => {
-    console.log("node-cron 실행 테스트");
+    console.log("매일 5시에 작업실행");
   });
 
   schedule.scheduleJob("1 * * * * *", () => {
@@ -14,9 +14,9 @@ export const testCronJob = () => {
 };
 
 export const load_QTConent_CronJob = () => {
-  schedule.scheduleJob("1 * * * * *", () => {
+  schedule.scheduleJob("00 00 05 * * 0-6", () => {
     UserService.findAll().then(async (data) => {
-      console.log("$$ start QT Cron Job");
+      console.log("$$ start QT cron-job");
       for (const user of data) {
         await Promise.all(
           user.notions.map(async (v) => {

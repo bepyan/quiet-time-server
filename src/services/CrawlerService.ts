@@ -91,6 +91,7 @@ const crawler = {
 /* ---------------- export ---------------- */
 
 export type CrawlerKey = keyof typeof crawler;
+export const crawlerKeyList = Object.keys(crawler);
 
 export const parse = async (key: CrawlerKey) => {
   return await crawler[key]();
