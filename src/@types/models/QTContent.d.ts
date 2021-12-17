@@ -1,24 +1,14 @@
 declare module "@types" {
-  /* ---------------- DTO ---------------- */
-  interface IUserDTO {
-    name: string;
+  interface QTContent {
+    title: string;
+    date: string;
+    range: string;
+    verses: Verse[];
+    commentaries: string[];
   }
 
-  interface ISubscriptNotionDTO {
-    name: string;
-    notion: INotion;
-  }
-
-  /* ---------------- Model ---------------- */
-
-  interface IUser {
-    name: string;
-    notions: INotion[];
-    create_date?: Date;
-  }
-
-  interface INotion {
-    key: string;
-    database_id: string;
+  interface Verse {
+    verse?: number;
+    text: string;
   }
 }

@@ -56,7 +56,7 @@ export const toYMDD = (target: DateValue = new Date()) => {
  * @param target string | number | Date
  * @returns 2021년 3월 4일
  */
-export const toYMD_KO = (target: DateValue) => {
+export const toYMD_KO = (target: DateValue = new Date()) => {
   if (!target) return "";
   const { year, month, date } = getDateData(target);
   return `${year}년 ${month}월 ${date}일`;
