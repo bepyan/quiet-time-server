@@ -1,4 +1,10 @@
 {
+  "name": "quiet-time-server",
+  "description": "✨ Cron job Crawler with Notion API",
+  "version": "1.0.0",
+  "engines": {
+    "yarn": "3.1.1"
+  },
   "packageManager": "yarn@3.1.1",
   "dependencies": {
     "@notionhq/client": "^0.4.11",
@@ -23,8 +29,6 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node -r tsconfig-paths/register --files src/app.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "ts-node -r tsconfig-paths/register --files src/app.ts",
-    "restart": "rm -rf ./dist && yarn build && yarn start"
+    "start": "ts-node -r tsconfig-paths/register --files src/app.ts"
   }
 }
