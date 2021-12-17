@@ -1,11 +1,10 @@
 name: deploy
 
 on:
-  push: 
+  push:
     branches: [main]
   pull_request:
     branches: [main]
-
 
 jobs:
   build:
@@ -19,6 +18,8 @@ jobs:
           node-version: "16.x"
       - name: install dependencies
         run: yarn install
+      - name: build
+        run: yarn build
       - name: deploy to heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:

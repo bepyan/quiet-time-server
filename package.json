@@ -26,6 +26,9 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node -r tsconfig-paths/register --files src/app.ts",
-    "start": "ts-node -r tsconfig-paths/register --files src/app.ts"
+    "preinstall": "npm i -g pm2",
+    "start": "pm2 start ecosystem.config.js",
+    "build": "tsc -p .",
+    "rebuild": "rm -rf ./dist && yarn build"
   }
 }

@@ -1,6 +1,6 @@
-import { asyncErrorCatcher } from "@middlewares";
-import { CrawlerService } from "@services";
 import express from "express";
+import { asyncErrorCatcher } from "../middlewares";
+import { CrawlerService } from "../services";
 
 const router = express.Router();
 

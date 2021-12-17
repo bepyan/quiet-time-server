@@ -1,5 +1,5 @@
 import schedule from "node-schedule";
-import { NotionService, UserService } from "@services";
+import { NotionService, UserService } from "../services";
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 

@@ -1,5 +1,5 @@
 import { ISubscriptNotionDTO, IUserDTO } from "@types";
-import { UserModel } from "@models";
+import { UserModel } from "../models";
 
 export const findAll = () => {
   return UserModel.find();

@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
-import { asyncErrorCatcher, validatorErrorChecker } from "@middlewares";
-import { CrawlerService, NotionService } from "@services";
+import { asyncErrorCatcher, validatorErrorChecker } from "../middlewares";
+import { CrawlerService, NotionService } from "../services";
 
 const router = express.Router();
 

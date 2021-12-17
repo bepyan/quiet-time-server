@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { body } from "express-validator";
-import { validatorErrorChecker } from "@middlewares";
-import { UserService } from "@services";
+import { validatorErrorChecker } from "../middlewares";
+import { UserService } from "../services";
 
 /* ---------------- GET ---------------- */
 

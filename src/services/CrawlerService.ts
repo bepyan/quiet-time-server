@@ -2,7 +2,7 @@ import { QTContent } from "@types";
 import axios from "axios";
 import cheerio from "cheerio";
 import iconv from "iconv-lite";
-import { Time } from "@utils";
+import { Time } from "../utils";
 
 /* ---------------- craw ---------------- */
 

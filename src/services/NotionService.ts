@@ -1,8 +1,8 @@
 import { Client } from "@notionhq/client";
 import { INotion } from "@types";
-import { CrawlerService } from "@services";
+import { CrawlerService } from "../services";
+import { Time } from "../utils";
 import { CrawlerKey } from "./CrawlerService";
-import { Time } from "@utils";
 
 interface AddQTContentProps extends INotion {
   contentType: CrawlerKey;
