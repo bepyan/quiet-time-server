@@ -5,7 +5,7 @@ import { Crawler, Time } from "@utils";
 export const onAddQTContent = async ({ key, database_id }: INotion) => {
   const notion = new Client({ auth: key });
 
-  const content = await Crawler.parseQTContent();
+  const content = await Crawler.parse("생명의삶");
 
   return notion.pages.create({
     parent: { database_id },

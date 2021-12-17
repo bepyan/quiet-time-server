@@ -1,17 +1,18 @@
-import { QTContent, Verse } from "@types";
+import { QTContent } from "@types";
 import axios from "axios";
-import cheerio, { CheerioAPI } from "cheerio";
+import cheerio from "cheerio";
 import iconv from "iconv-lite";
 import { toYMDD } from "./Time";
 
 /* ---------------- craw ---------------- */
 
 const links = {
-  bible: "https://www.duranno.com/qt/view/bible.asp",
-  commentary: "https://www.duranno.com/qt/view/explain.asp",
+  생명의삶: "https://www.duranno.com/qt/view/bible.asp",
+  생명의삶_해설: "https://www.duranno.com/qt/view/explain.asp",
+  매일성경: "https://sum.su.or.kr:8888/bible/today",
 };
 
-const getHTML = async (link: keyof typeof links) => {
+const getHTML = async (link: keyof typeof links, encoding = "utf-8") => {
   const html = await axios({
     url: links[link],
     method: "GET",
@@ -22,58 +23,65 @@ const getHTML = async (link: keyof typeof links) => {
     responseEncoding: "binary",
     responseType: "arraybuffer",
   } as any);
-  return iconv.decode(html.data, "euc-kr");
+  return iconv.decode(html.data, encoding);
 };
 
-/* ---------------- parse util ---------------- */
+/* ---------------- parse ---------------- */
 
-const parseBible = ($: CheerioAPI) => {
-  let verses: Verse[] = [];
+const crawler = {
+  생명의삶: async (): Promise<QTContent> => {
+    const $ = cheerio.load(await getHTML("생명의삶", "euc-kr"));
+    const $commentary = cheerio.load(await getHTML("생명의삶_해설", "euc-kr"));
 
-  $(".bible")
-    .children()
-    .each((_, elem) => {
-      const $elem = $(elem);
-      if (elem.tagName === "p") {
-        verses.push({ text: $elem.text().trim() });
-        return;
-      }
+    return {
+      title: $("h1 span").text().trim(),
+      range: $("h1 em").text().trim(),
+      date: toYMDD(),
+      verses: $(".bible")
+        .children()
+        .map((_, elem) => {
+          const $elem = $(elem);
+          if (elem.tagName === "p") return { text: $elem.text().trim() };
 
-      const verse = $elem.find("th").text();
-      const text = $elem.find("td").text().trim();
+          return {
+            verse: +$elem.find("th").text().trim(),
+            text: $elem.find("td").text().trim(),
+          };
+        })
+        .toArray(),
+      commentaries: $commentary(".bible")
+        .children()
+        .map((_, elem) => $(elem).text().trim())
+        .toArray(),
+    };
+  },
 
-      verses.push({ verse: +verse, text });
-    });
+  매일성경: async (): Promise<QTContent> => {
+    const $ = cheerio.load(await getHTML("매일성경"));
 
-  return verses;
+    return {
+      title: $(".bible_text").text().trim(),
+      range: $("#mainView_2 .bibleinfo_box").text().trim(),
+      date: toYMDD(),
+      verses: $(".body_list")
+        .children()
+        .map((_, elem) => ({
+          verse: +$(elem).find(".num").text().trim(),
+          text: $(elem).find(".info").text().trim(),
+        }))
+        .toArray(),
+      commentaries: $(".body_cont")
+        .children()
+        .map((_, elem) => {
+          return $(elem).text().trim();
+        })
+        .toArray(),
+    };
+  },
 };
 
-const parseCommentaries = ($: CheerioAPI) => {
-  let commentaries: string[] = [];
+/* ---------------- export ---------------- */
 
-  $(".bible")
-    .children()
-    .each((_, elem) => {
-      commentaries.push($(elem).text().trim());
-    });
-
-  return commentaries;
-};
-
-/* ---------------- method ---------------- */
-
-export const parseQTContent = async (): Promise<QTContent> => {
-  const bibleHTML = await getHTML("bible");
-  const $bible = cheerio.load(bibleHTML);
-
-  const commentaryHTML = await getHTML("commentary");
-  const $commentary = cheerio.load(commentaryHTML);
-
-  return {
-    title: $bible("h1 span").text().trim(),
-    range: $bible("h1 em").text().trim(),
-    date: toYMDD(),
-    verses: parseBible($bible),
-    commentaries: parseCommentaries($commentary),
-  };
+export const parse = (key: keyof typeof crawler) => {
+  return crawler[key]();
 };
