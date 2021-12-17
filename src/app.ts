@@ -1,13 +1,13 @@
 import "dotenv/config";
 import express from "express";
-import { loadCronJob, loadDB, load_QTConent_CronJob } from "loaders";
+import { loadDB, load_QTConent_CronJob } from "loaders";
 import routers from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 1234;
 
 loadDB();
-// loadCronJob();
+// testCronJob();
 load_QTConent_CronJob();
 
 app.use(express.urlencoded({ extended: true }));

@@ -2,7 +2,7 @@ import { QTContent } from "@types";
 import axios from "axios";
 import cheerio from "cheerio";
 import iconv from "iconv-lite";
-import { toYMDD } from "./Time";
+import { Time } from "@utils";
 
 /* ---------------- craw ---------------- */
 
@@ -36,7 +36,7 @@ const crawler = {
     return {
       title: $("h1 span").text().trim(),
       range: $("h1 em").text().trim(),
-      date: toYMDD(),
+      date: Time.toYMDD(),
       verses: $(".bible")
         .children()
         .map((_, elem) => {
@@ -71,7 +71,7 @@ const crawler = {
         .split(" ")
         .slice(2, 6)
         .join(" "),
-      date: toYMDD(),
+      date: Time.toYMDD(),
       verses: $(".body_list")
         .children()
         .map((_, elem) => ({

@@ -13,6 +13,12 @@
     // 절대 경로설정
     "baseUrl": "./src",
     "paths": {
+      "@controllers": ["./controllers"],
+      "@loaders": ["./loaders"],
+      "@middlewares": ["./middlewares"],
+      "@models": ["./models"],
+      "@routes": ["./routes"],
+      "@services": ["./services"],
       "@utils": ["./utils"]
     }
   },

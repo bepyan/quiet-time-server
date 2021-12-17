@@ -1,7 +1,8 @@
 import { Client } from "@notionhq/client";
 import { INotion } from "@types";
-import { Crawler, Time } from "@utils";
-import { CrawlerKey } from "./Crawler";
+import { CrawlerService } from "@services";
+import { CrawlerKey } from "./CrawlerService";
+import { Time } from "@utils";
 
 interface AddQTContentProps extends INotion {
   contentType: CrawlerKey;
@@ -14,7 +15,7 @@ export const addQTContent = async ({
 }: AddQTContentProps) => {
   const notion = new Client({ auth: key });
 
-  const content = await Crawler.parse(contentType);
+  const content = await CrawlerService.parse(contentType);
 
   return notion.pages.create({
     parent: { database_id },

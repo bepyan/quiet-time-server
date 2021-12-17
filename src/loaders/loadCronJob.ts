@@ -1,10 +1,9 @@
-import { Notion } from "@utils";
-import { UserModel } from "models";
 import schedule from "node-schedule";
+import { NotionService, UserService } from "@services";
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 
-export const loadCronJob = () => {
+export const testCronJob = () => {
   schedule.scheduleJob("00 00 05 * * 0-6", () => {
     console.log("node-cron 실행 테스트");
   });
@@ -16,12 +15,12 @@ export const loadCronJob = () => {
 
 export const load_QTConent_CronJob = () => {
   schedule.scheduleJob("1 * * * * *", () => {
-    UserModel.find().then(async (data) => {
+    UserService.findAll().then(async (data) => {
       console.log("$$ start QT Cron Job");
       for (const user of data) {
         await Promise.all(
           user.notions.map(async (v) => {
-            await Notion.addQTContent(v);
+            await NotionService.addQTContent(v);
           })
         );
       }

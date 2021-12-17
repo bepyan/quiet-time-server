@@ -1,4 +1,4 @@
-import { CrawlerKey } from "utils/Crawler";
+import { CrawlerKey } from "services/CrawlerService";
 
 declare module "@types" {
   /* ---------------- DTO ---------------- */

@@ -1,21 +1,13 @@
-import { ISubscriptNotionDTO, IUserDTO } from "@types";
 import { RequestHandler } from "express";
 import { body } from "express-validator";
-import { validatorErrorChecker } from "middlewares";
-import { UserModel } from "models";
+import { validatorErrorChecker } from "@middlewares";
+import { UserService } from "@services";
 
 /* ---------------- GET ---------------- */
 
-export const findAll: RequestHandler = (req, res) => {
-  UserModel.find()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: err.message || "Retrieve document failure." });
-    });
+export const findAll: RequestHandler = async (req, res) => {
+  const data = await UserService.findAll();
+  res.send(data);
 };
 
 /* ---------------- POST ---------------- */
@@ -24,9 +16,7 @@ export const create: RequestHandler[] = [
   body("name").notEmpty(),
   validatorErrorChecker,
   async (req, res) => {
-    const body: IUserDTO = req.body;
-
-    const user = await new UserModel(body).save();
+    const user = await UserService.createUser(req.body);
     res.send(user);
   },
 ];
@@ -36,12 +26,7 @@ export const subscriptNotion: RequestHandler[] = [
   body("notion").notEmpty(),
   validatorErrorChecker,
   async (req, res) => {
-    const { name, notion }: ISubscriptNotionDTO = req.body;
-
-    const user = await UserModel.updateOne(
-      { name },
-      { $push: { notions: notion } }
-    );
+    const user = await UserService.addNotion(req.body);
     res.send(user);
   },
 ];
