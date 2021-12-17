@@ -6,7 +6,7 @@
   "engines": {
     "node": "16.13.1",
     "npm": "8.1.2",
-    "yarn": "3.1.1"
+    "yarn": "1.22.17"
   },
   "dependencies": {
     "@notionhq/client": "^0.4.11",
@@ -30,7 +30,7 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node --files src/app.ts",
-    "start": "npm i -g pm2 && pm2 start ecosystem.config.js",
+    "start": "npm i -g pm2 && pm2 start-runtime ecosystem.config.js",
     "build": "rm -rf ./dist && tsc -p ."
   }
 }
