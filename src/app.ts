@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import routers from "@routes";
 import { loadDB, load_QTConent_CronJob } from "@loaders";
-import { errorResponser, errorLogger, asyncErrorCatcher } from "@middlewares";
+import { errorResponser, errorLogger } from "@middlewares";
 
 const app = express();
 const PORT = process.env.PORT || 1234;
