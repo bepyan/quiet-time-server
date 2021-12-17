@@ -28,7 +28,6 @@ jobs:
           heroku_email: "bepyan@naver.com"
           healthcheck: "https://quiet-time-server.herokuapp.com/health"
           dontuseforce: "true"
-          justlogin: "true"
           procfile: "web:yarn start"
         env:
           HD_PORT: ${{secrets.PORT}}
