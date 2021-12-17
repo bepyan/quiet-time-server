@@ -17,8 +17,7 @@
     "express-validator": "^6.14.0",
     "iconv-lite": "^0.6.3",
     "mongoose": "^6.1.2",
-    "node-schedule": "^2.1.0",
-    "pm2": "^5.1.2"
+    "node-schedule": "^2.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
@@ -31,7 +30,8 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node --files src/app.ts",
-    "start": "pm2 start dist/app.js",
-    "build": "rm -rf ./dist && tsc -p ."
+    "start": "pm2-runtime start ecosystem.config.js",
+    "build": "rm -rf ./dist && tsc -p .",
+    "heroku-postbuild": "npm i -g pm2"
   }
 }
