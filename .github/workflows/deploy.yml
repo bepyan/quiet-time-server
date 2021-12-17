@@ -17,15 +17,17 @@ jobs:
         with:
           node-version: "16.x"
       - name: install dependencies
-        run: yarn install
+        run: npm i -g pm2 && yarn install
       - name: build application
         run: yarn build
       - name: deploy to heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: quiet-time-server
-          heroku_email: bepyan@naver.com
+          heroku_app_name: "quiet-time-server"
+          heroku_email: "bepyan@naver.com"
+          healthcheck: "https://quiet-time-server.herokuapp.com/health"
+          procfile: "web: yarn start"
         env:
           HD_PORT: ${{secrets.PORT}}
           HD_MONGOOSE_URI: ${{secrets.MONGOOSE_URI}}
