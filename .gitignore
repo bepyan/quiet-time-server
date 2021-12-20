@@ -27,4 +27,5 @@ package-lock.json
 !.yarn/versions
 
 
+/dist
 /node_modules
