@@ -14,17 +14,31 @@ export const testCronJob = () => {
 };
 
 export const load_QTConent_CronJob = () => {
-  schedule.scheduleJob("00 00 05 * * 0-6", () => {
-    UserService.findAll().then(async (data) => {
-      console.log("$$ start QT cron-job");
-      for (const user of data) {
-        await Promise.all(
-          user.notions.map(async (v) => {
-            await NotionService.addQTContent(v);
-          })
-        );
-      }
-      console.log(`$$ ${data.length} jobs done`);
+
+  const rule = new schedule.RecurrenceRule();
+  rule.hour = 5;
+  rule.minute = 0;
+  rule.dayOfWeek = [0, new schedule.Range(0, 6)];
+  rule.tz = 'Asia/Seoul';
+
+
+  if (process.env.INSTANCE_ID === "0") {
+    console.log("$$ init corn setting")
+
+    schedule.scheduleJob(rule, () => {
+      UserService.findAll().then(async (data) => {
+        console.log("$$ start QT cron-job");
+
+        for (const user of data) {
+          await Promise.all(
+            user.notions.map(async (v) => {
+              await NotionService.addQTContent(v);
+            })
+          );
+        }
+        console.log(`$$ ${data.length} jobs done`);
+      });
     });
-  });
+
+  }
 };
