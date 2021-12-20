@@ -1,4 +1,6 @@
 import "dotenv/config";
+
+import cors from "cors";
 import express from "express";
 import routers from "./routes";
 import { loadDB, load_QTConent_CronJob } from "./loaders";
@@ -10,6 +12,8 @@ const PORT = process.env.PORT || 1234;
 loadDB();
 load_QTConent_CronJob();
 // testCronJob();
+
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

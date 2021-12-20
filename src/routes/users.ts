@@ -4,7 +4,7 @@ import { UserController } from "../controllers";
 const router = express.Router();
 
 router.get("/", UserController.findAll);
-router.get(`/:name`, UserController.findOne);
+router.get("/:name", UserController.findOne);
 
 router.post("/", UserController.create);
 router.post("/notion", UserController.subscriptNotion);
