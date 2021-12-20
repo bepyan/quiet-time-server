@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { validatorErrorChecker } from "../middlewares";
 import { UserService } from "../services";
 
@@ -9,6 +9,15 @@ export const findAll: RequestHandler = async (req, res) => {
   const data = await UserService.findAll();
   res.send(data);
 };
+
+export const findOne: RequestHandler[] = [
+  param("name").notEmpty(),
+  validatorErrorChecker,
+  async (req, res) => {
+    const data = await UserService.findUser({ name: req.params.name });
+    res.send(data);
+  },
+];
 
 /* ---------------- POST ---------------- */
 

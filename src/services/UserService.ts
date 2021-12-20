@@ -5,6 +5,10 @@ export const findAll = () => {
   return UserModel.find();
 };
 
+export const findUser = ({ name }: { name: string }) => {
+  return UserModel.findOne({ name });
+};
+
 export const createUser = (user: IUserDTO) => {
   return new UserModel(user).save();
 };

@@ -1,5 +1,6 @@
 import express from "express";
-import { asyncErrorCatcher } from "../middlewares";
+import { param } from "express-validator";
+import { asyncErrorCatcher, validatorErrorChecker } from "../middlewares";
 import { CrawlerService } from "../services";
 
 const router = express.Router();
@@ -10,17 +11,13 @@ router.use("/", (req, res, next) => {
 });
 
 router.get(
-  "/생명의삶",
+  "/:contentType",
+  param("contentType").notEmpty().isIn(CrawlerService.crawlerKeyList),
+  validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
-    const content = await CrawlerService.parse("생명의삶");
-    res.send(content);
-  })
-);
-
-router.get(
-  "/매일성경",
-  asyncErrorCatcher(async (req, res) => {
-    const content = await CrawlerService.parse("매일성경");
+    const content = await CrawlerService.parse(
+      req.params.contentType as CrawlerService.CrawlerKey
+    );
     res.send(content);
   })
 );
