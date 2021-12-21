@@ -1,19 +1,39 @@
 import { Client } from "@notionhq/client";
-import { INotion } from "@types";
+import { NotionDatabaseDTO, NotionPageDTO } from "@types";
 import { CrawlerService } from "../services";
 import { Time } from "../utils";
-import { CrawlerKey } from "./CrawlerService";
 
-interface AddQTContentProps extends INotion {
-  contentType: CrawlerKey;
-}
+export const createQTDatabase = async ({
+  notion_auth,
+  page_id,
+}: NotionDatabaseDTO) => {
+  const notion = new Client({ auth: notion_auth });
 
-export const addQTContent = async ({
-  key,
+  const data = await notion.databases.create({
+    parent: { page_id },
+    icon: { emoji: "📖" },
+    title: [{ text: { content: `QT 말씀` } }],
+    properties: {
+      title: { title: {} },
+      아멘: { people: {} },
+      큐티책: { rich_text: {} },
+      날짜: { date: {} },
+    },
+  });
+
+  await notion.databases.query({
+    database_id: data.id,
+    sorts: [{ property: "날짜", direction: "descending" }],
+  });
+  return data;
+};
+
+export const createQTPage = async ({
+  notion_auth,
   database_id,
   contentType,
-}: AddQTContentProps) => {
-  const notion = new Client({ auth: key });
+}: NotionPageDTO) => {
+  const notion = new Client({ auth: notion_auth });
 
   const content = await CrawlerService.parse(contentType);
 

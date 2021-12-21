@@ -10,8 +10,8 @@ router.post(
   body("contentType").notEmpty().isIn(CrawlerService.crawlerKeyList),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
-    const response = await NotionService.addQTContent({
-      key: process.env.NOTION_KEY!,
+    const response = await NotionService.createQTPage({
+      notion_auth: process.env.NOTION_KEY!,
       database_id: process.env.NOTION_DATABASE_ID!,
       contentType: req.body.contentType,
     });

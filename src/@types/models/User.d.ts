@@ -2,12 +2,23 @@ import { CrawlerKey } from "../../services/CrawlerService";
 
 declare module "@types" {
   /* ---------------- DTO ---------------- */
-  interface IUserDTO {
+  interface UserDTO {
     name: string;
-    notions?: INotion[];
+    notion_auth: string;
   }
 
-  interface ISubscriptNotionDTO {
+  interface NotionDatabaseDTO {
+    notion_auth: string;
+    page_id: string;
+  }
+
+  interface NotionPageDTO {
+    notion_auth: string;
+    database_id: string;
+    contentType: CrawlerKey;
+  }
+
+  interface SubscriptNotionDTO {
     name: string;
     notion: INotion;
   }
@@ -16,13 +27,14 @@ declare module "@types" {
 
   interface IUser {
     name: string;
+    notion_auth: string;
     notions: INotion[];
     create_date?: Date;
   }
 
   interface INotion {
-    key: string;
     database_id: string;
     contentType: CrawlerKey;
+    create_date?: Date;
   }
 }
