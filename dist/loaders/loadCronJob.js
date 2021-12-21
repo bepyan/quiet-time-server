@@ -12,19 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.load_QTConent_CronJob = exports.testCronJob = void 0;
+exports.load_QTConent_CronJob = exports.load_heroku_awaker = void 0;
+const axios_1 = __importDefault(require("axios"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
 const services_1 = require("../services");
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
-const testCronJob = () => {
-    node_schedule_1.default.scheduleJob("00 00 05 * * 0-6", () => {
-        console.log("매일 5시에 작업실행");
-    });
-    node_schedule_1.default.scheduleJob("1 * * * * *", () => {
-        console.log("매 1분 마다 실행");
+const load_heroku_awaker = () => {
+    node_schedule_1.default.scheduleJob("*/20 * * * *", () => {
+        console.log("$$ awake heroku in every 20 min");
+        axios_1.default.get(`https://quiet-time-server.herokuapp.com/api`);
     });
 };
-exports.testCronJob = testCronJob;
+exports.load_heroku_awaker = load_heroku_awaker;
 const load_QTConent_CronJob = () => {
     const rule = new node_schedule_1.default.RecurrenceRule();
     rule.hour = 5;
