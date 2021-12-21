@@ -17,11 +17,13 @@ const axios_1 = __importDefault(require("axios"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
 const services_1 = require("../services");
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
+const isHeroku = () => process.env.INSTANCE_ID === "0";
 const load_heroku_awaker = () => {
-    node_schedule_1.default.scheduleJob("*/20 * * * *", () => {
-        console.log("$$ awake heroku in every 20 min");
-        axios_1.default.get(`https://quiet-time-server.herokuapp.com/api`);
-    });
+    if (isHeroku())
+        node_schedule_1.default.scheduleJob("*/20 * * * *", () => {
+            console.log("$$ awake heroku in every 20 min");
+            axios_1.default.get(`https://quiet-time-server.herokuapp.com/api`);
+        });
 };
 exports.load_heroku_awaker = load_heroku_awaker;
 const load_QTConent_CronJob = () => {
@@ -29,15 +31,15 @@ const load_QTConent_CronJob = () => {
     rule.hour = 5;
     rule.minute = 0;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
-    rule.tz = 'Asia/Seoul';
-    if (process.env.INSTANCE_ID === "0") {
+    rule.tz = "Asia/Seoul";
+    if (isHeroku()) {
         console.log("$$ init corn setting");
         node_schedule_1.default.scheduleJob(rule, () => {
             services_1.UserService.findAll().then((data) => __awaiter(void 0, void 0, void 0, function* () {
                 console.log("$$ start QT cron-job");
                 for (const user of data) {
                     yield Promise.all(user.notions.map((v) => __awaiter(void 0, void 0, void 0, function* () {
-                        yield services_1.NotionService.addQTContent(v);
+                        yield services_1.NotionService.createQTPage(Object.assign({ notion_auth: user.notion_auth }, v));
                     })));
                 }
                 console.log(`$$ ${data.length} jobs done`);

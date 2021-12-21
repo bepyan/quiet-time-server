@@ -7,11 +7,13 @@ exports.UserModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 exports.UserModel = mongoose_1.default.model("User", new mongoose_1.default.Schema({
     name: { type: String, required: true },
+    notion_auth: { type: String, required: true },
     notions: [
         {
-            key: String,
+            page_id: String,
             database_id: String,
             contentType: String,
+            create_date: { type: Date, default: Date.now },
         },
     ],
     create_date: { type: Date, default: Date.now },

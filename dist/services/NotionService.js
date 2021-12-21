@@ -9,12 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addQTContent = void 0;
+exports.createQTPage = exports.createQTDatabase = void 0;
 const client_1 = require("@notionhq/client");
 const services_1 = require("../services");
 const utils_1 = require("../utils");
-const addQTContent = ({ key, database_id, contentType, }) => __awaiter(void 0, void 0, void 0, function* () {
-    const notion = new client_1.Client({ auth: key });
+const createQTDatabase = ({ notion_auth, page_id, }) => __awaiter(void 0, void 0, void 0, function* () {
+    const notion = new client_1.Client({ auth: notion_auth });
+    const data = yield notion.databases.create({
+        parent: { page_id },
+        icon: { emoji: "📖" },
+        title: [{ text: { content: `QT 말씀` } }],
+        properties: {
+            title: { title: {} },
+            아멘: { people: {} },
+            큐티책: { rich_text: {} },
+            날짜: { date: {} },
+        },
+    });
+    yield notion.databases.query({
+        database_id: data.id,
+        sorts: [{ property: "날짜", direction: "descending" }],
+    });
+    return data;
+});
+exports.createQTDatabase = createQTDatabase;
+const createQTPage = ({ notion_auth, database_id, contentType, }) => __awaiter(void 0, void 0, void 0, function* () {
+    const notion = new client_1.Client({ auth: notion_auth });
     const content = yield services_1.CrawlerService.parse(contentType);
     return notion.pages.create({
         parent: { database_id },
@@ -67,5 +87,5 @@ const addQTContent = ({ key, database_id, contentType, }) => __awaiter(void 0, v
         ],
     });
 });
-exports.addQTContent = addQTContent;
+exports.createQTPage = createQTPage;
 //# sourceMappingURL=NotionService.js.map

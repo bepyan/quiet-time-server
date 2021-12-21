@@ -18,8 +18,8 @@ const middlewares_1 = require("../middlewares");
 const services_1 = require("../services");
 const router = express_1.default.Router();
 router.post("/", (0, express_validator_1.body)("contentType").notEmpty().isIn(services_1.CrawlerService.crawlerKeyList), middlewares_1.validatorErrorChecker, (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield services_1.NotionService.addQTContent({
-        key: process.env.NOTION_KEY,
+    const response = yield services_1.NotionService.createQTPage({
+        notion_auth: process.env.NOTION_KEY,
         database_id: process.env.NOTION_DATABASE_ID,
         contentType: req.body.contentType,
     });
