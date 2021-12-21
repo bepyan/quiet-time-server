@@ -1,17 +1,15 @@
+import axios from "axios";
 import schedule from "node-schedule";
 import { NotionService, UserService } from "../services";
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 
-export const testCronJob = () => {
-  schedule.scheduleJob("00 00 05 * * 0-6", () => {
-    console.log("매일 5시에 작업실행");
+export const load_heroku_awaker = () => {
+  schedule.scheduleJob("*/20 * * * *", () => {
+    console.log("$$ awake heroku in every 20 min")
+    axios.get(`https://quiet-time-server.herokuapp.com/api`)
   });
-
-  schedule.scheduleJob("1 * * * * *", () => {
-    console.log("매 1분 마다 실행");
-  });
-};
+}
 
 export const load_QTConent_CronJob = () => {
 

@@ -3,15 +3,15 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import routers from "./routes";
-import { loadDB, load_QTConent_CronJob } from "./loaders";
+import { load_heroku_awaker, loadDB, load_QTConent_CronJob } from "./loaders";
 import { errorResponser, errorLogger } from "./middlewares";
 
 const app = express();
 const PORT = process.env.PORT || 1234;
 
 loadDB();
+load_heroku_awaker()
 load_QTConent_CronJob();
-// testCronJob();
 
 app.use(cors());
 
