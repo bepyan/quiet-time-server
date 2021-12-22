@@ -24,3 +24,7 @@ export const addNotion = ({ name, notion }: SubscriptNotionDTO) => {
 export const delelteNotion = ({ name, notion }: SubscriptNotionDTO) => {
   return UserModel.updateOne({ name }, { $pull: { notions: notion } });
 };
+
+export const hasSubscript = async ({ name, notion }: SubscriptNotionDTO) => {
+  return !!(await UserModel.findOne({ name, notion }));
+};

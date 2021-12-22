@@ -36,12 +36,13 @@ export const create: RequestHandler[] = [
 ];
 
 export const createNotion: RequestHandler[] = [
-  body("name").notEmpty(),
+  param("name").notEmpty(),
   body("page_id").notEmpty(),
   body("contentType").notEmpty().isIn(CrawlerService.crawlerKeyList),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
-    const { name, page_id, contentType } = req.body;
+    const { name } = req.params;
+    const { page_id, contentType } = req.body;
     const user = await UserService.findUser({ name });
     if (!user) {
       generateError({ status: 404, message: "일치된 사용자가 없습니다." });
@@ -70,22 +71,31 @@ export const createNotion: RequestHandler[] = [
 ];
 
 export const subscriptNotion: RequestHandler[] = [
-  body("name").notEmpty(),
+  param("name").notEmpty(),
   body("notion").notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
-    const { name, notion } = req.body;
+    const { name } = req.params;
+    const { notion } = req.body;
+    //  중복된 구독이면 에러
+    if (await UserService.hasSubscript({ name, notion })) {
+      generateError({ status: 400, message: "중복된 구독정보가 있습니다." });
+      return;
+    }
+
     const result = await UserService.addNotion({ name, notion });
     res.send(result);
   }),
 ];
 
 export const unSubscriptNotion: RequestHandler[] = [
-  body("name").notEmpty(),
+  param("name").notEmpty(),
   body("notion").notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
-    const user = await UserService.delelteNotion(req.body);
+    const { name } = req.params;
+    const { notion } = req.body;
+    const user = await UserService.delelteNotion({ name, notion });
     res.send(user);
   }),
 ];
