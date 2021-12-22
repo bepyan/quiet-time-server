@@ -52,7 +52,6 @@ export const asyncErrorCatcher =
     try {
       await fn(req, res, next);
     } catch (e: any) {
-      e.status = 500;
       next(e);
     }
   };
