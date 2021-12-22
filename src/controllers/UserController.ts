@@ -45,7 +45,7 @@ export const createNotion: RequestHandler[] = [
     const { page_id, contentType } = req.body;
     const user = await UserService.findUser({ name });
     if (!user) {
-      generateError({ status: 404, message: "일치된 사용자가 없습니다." });
+      generateError({ status: 400, message: "일치된 사용자가 없습니다." });
       return;
     }
     const { notion_auth } = user;
