@@ -26,5 +26,9 @@ export const delelteNotion = ({ name, notion }: SubscriptNotionDTO) => {
 };
 
 export const hasSubscript = async ({ name, notion }: SubscriptNotionDTO) => {
-  return !!(await UserModel.findOne({ name, notion }));
+  const duplicated = await UserModel.findOne({
+    name,
+    notions: { $elemMatch: notion },
+  });
+  return !!duplicated;
 };
