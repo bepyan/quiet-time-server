@@ -28,7 +28,7 @@ const load_heroku_awaker = () => {
 exports.load_heroku_awaker = load_heroku_awaker;
 const load_QTConent_CronJob = () => {
     const rule = new node_schedule_1.default.RecurrenceRule();
-    rule.hour = 5;
+    rule.hour = 12;
     rule.minute = 0;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
     rule.tz = "Asia/Seoul";
@@ -37,12 +37,17 @@ const load_QTConent_CronJob = () => {
         node_schedule_1.default.scheduleJob(rule, () => {
             services_1.UserService.findAll().then((data) => __awaiter(void 0, void 0, void 0, function* () {
                 console.log("$$ start QT cron-job");
-                for (const user of data) {
-                    yield Promise.all(user.notions.map((v) => __awaiter(void 0, void 0, void 0, function* () {
-                        yield services_1.NotionService.createQTPage(Object.assign({ notion_auth: user.notion_auth }, v));
-                    })));
+                try {
+                    for (const user of data) {
+                        yield Promise.all(user.notions.map((v) => __awaiter(void 0, void 0, void 0, function* () {
+                            yield services_1.NotionService.createQTPage(Object.assign({ notion_auth: user.notion_auth }, v));
+                        })));
+                    }
+                    console.log(`$$ ${data.length} jobs done`);
                 }
-                console.log(`$$ ${data.length} jobs done`);
+                catch (e) {
+                    console.log(`$$ [Error] QT cron-job`, e);
+                }
             }));
         });
     }
