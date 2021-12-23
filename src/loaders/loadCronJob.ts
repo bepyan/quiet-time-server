@@ -17,7 +17,7 @@ export const load_heroku_awaker = () => {
 export const load_QTConent_CronJob = () => {
   const rule = new schedule.RecurrenceRule();
   rule.hour = 15;
-  rule.minute = 0;
+  rule.minute = 30;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
@@ -32,9 +32,11 @@ export const load_QTConent_CronJob = () => {
           for (const user of data) {
             await Promise.all(
               user.notions.map(async (v) => {
+                console.log(v)
                 await NotionService.createQTPage({
                   notion_auth: user.notion_auth,
-                  ...v,
+                  database_id: v.database_id,
+                  contentType: v.contentType
                 });
               })
             );
