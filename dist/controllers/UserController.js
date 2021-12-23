@@ -32,11 +32,11 @@ exports.create = [
     (0, express_validator_1.body)("name").notEmpty(),
     (0, express_validator_1.body)("notion_auth").notEmpty(),
     middlewares_1.validatorErrorChecker,
-    (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { name, notion_auth } = req.body;
         const user = yield services_1.UserService.createUser({ name, notion_auth });
         res.send(user);
-    }),
+    })),
 ];
 exports.createNotion = [
     (0, express_validator_1.param)("name").notEmpty(),

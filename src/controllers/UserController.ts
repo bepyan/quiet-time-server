@@ -29,11 +29,11 @@ export const create: RequestHandler[] = [
   body("name").notEmpty(),
   body("notion_auth").notEmpty(),
   validatorErrorChecker,
-  async (req, res) => {
+  asyncErrorCatcher(async (req, res) => {
     const { name, notion_auth } = req.body;
     const user = await UserService.createUser({ name, notion_auth });
     res.send(user);
-  },
+  }),
 ];
 
 export const createNotion: RequestHandler[] = [
