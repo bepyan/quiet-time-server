@@ -1,4 +1,4 @@
-import { QTContent } from "@types";
+import { IQTContent } from "@types";
 import axios from "axios";
 import cheerio from "cheerio";
 import iconv from "iconv-lite";
@@ -30,11 +30,12 @@ const getHTML = async (link: keyof typeof links, encoding = "utf-8") => {
 /* ---------------- parse ---------------- */
 
 const crawler = {
-  생명의삶: async (): Promise<QTContent> => {
+  생명의삶: async (): Promise<IQTContent> => {
     const $ = cheerio.load(await getHTML("생명의삶", "euc-kr"));
     const $commentary = cheerio.load(await getHTML("생명의삶_해설", "euc-kr"));
 
     return {
+      type: "생명의삶",
       title: $("h1 span").text().trim(),
       range: $("h1 em").text().trim(),
       date: Time.toYMDD(),
@@ -61,10 +62,11 @@ const crawler = {
     };
   },
 
-  매일성경: async (): Promise<QTContent> => {
+  매일성경: async (): Promise<IQTContent> => {
     const $ = cheerio.load(await getHTML("매일성경"));
 
     return {
+      type: "매일성경",
       title: $(".bible_text").text().trim(),
       range: $("#mainView_2 .bibleinfo_box")
         .text()

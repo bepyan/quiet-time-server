@@ -1,14 +1,20 @@
 declare module "@types" {
-  interface QTContent {
+  interface IQTContent {
+    type: string;
     title: string;
     date: string;
     range: string;
-    verses: Verse[];
+    verses: IVerse[];
     commentaries: string[];
   }
 
-  interface Verse {
+  interface IVerse {
     verse?: number;
     text: string;
+  }
+
+  interface SearchQTContentDTO {
+    type: string;
+    date: string;
   }
 }
