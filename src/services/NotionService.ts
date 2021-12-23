@@ -75,6 +75,8 @@ export const createQTPage = async ({
         ].filter((v) => !!v);
       }, [] as any),
       { paragraph: { text: [] } },
+      { paragraph: { text: [] } },
+      { divider: {} },
       {
         toggle: {
           text: [{ text: { content: "본문해설" } }],
@@ -85,10 +87,10 @@ export const createQTPage = async ({
                 ? { heading_3: { text: [{ text: { content: text } }] } }
                 : { paragraph: { text: [{ text: { content: text } }] } }
             ),
-            { divider: {} },
           ],
         },
       },
+      { divider: {} },
     ],
   });
 };
