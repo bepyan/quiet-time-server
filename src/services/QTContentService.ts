@@ -5,14 +5,14 @@ export const findAll = () => {
     return QTContentModel.find();
 };
 
-export const findOne = ({ date, type }: SearchQTContentDTO) => {
-    return QTContentModel.findOne({ type, date });
+export const findOne = ({ contentType, date }: SearchQTContentDTO) => {
+    return QTContentModel.findOne({ contentType, date });
 }
 
 export const createOne = (content: IQTContent) => {
     return new QTContentModel(content).save();
 };
 
-export const deleteOne = ({ date, type }: SearchQTContentDTO) => {
-    return QTContentModel.deleteOne({ date, type });
+export const deleteOne = ({ contentType, date }: SearchQTContentDTO) => {
+    return QTContentModel.deleteOne({ contentType, date });
 };

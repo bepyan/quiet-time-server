@@ -35,7 +35,7 @@ const crawler = {
     const $commentary = cheerio.load(await getHTML("생명의삶_해설", "euc-kr"));
 
     return {
-      type: "생명의삶",
+      contentType: "생명의삶",
       title: $("h1 span").text().trim(),
       range: $("h1 em").text().trim(),
       date: Time.toYMDD(),
@@ -66,7 +66,7 @@ const crawler = {
     const $ = cheerio.load(await getHTML("매일성경"));
 
     return {
-      type: "매일성경",
+      contentType: "매일성경",
       title: $(".bible_text").text().trim(),
       range: $("#mainView_2 .bibleinfo_box")
         .text()

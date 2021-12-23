@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 export const QTContentModel = mongoose.model<IQTContent>(
     "QTContent",
     new mongoose.Schema({
-        type: { type: String, required: true },
+        contentType: { type: String, required: true },
         title: { type: String, required: true },
         date: { type: String, required: true },
         range: { type: String, required: true },

@@ -1,6 +1,6 @@
 declare module "@types" {
   interface IQTContent {
-    type: string;
+    contentType: ContentType;
     title: string;
     date: string;
     range: string;
@@ -14,7 +14,7 @@ declare module "@types" {
   }
 
   interface SearchQTContentDTO {
-    type: string;
+    contentType: ContentType;
     date: string;
   }
 }

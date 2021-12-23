@@ -1,6 +1,8 @@
 import { CrawlerKey } from "../../services/CrawlerService";
 
 declare module "@types" {
+  type ContentType = CrawlerKey
+
   /* ---------------- DTO ---------------- */
   interface UserDTO {
     name: string;
@@ -15,7 +17,7 @@ declare module "@types" {
   interface NotionPageDTO {
     notion_auth: string;
     database_id: string;
-    contentType: CrawlerKey;
+    contentType: ContentType;
   }
 
   interface SubscriptNotionDTO {
@@ -34,7 +36,7 @@ declare module "@types" {
 
   interface INotion {
     database_id: string;
-    contentType: CrawlerKey;
+    contentType: ContentType;
     create_date?: Date;
   }
 }
