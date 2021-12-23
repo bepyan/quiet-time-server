@@ -2,6 +2,7 @@ import { QTContent } from "@types";
 import axios from "axios";
 import cheerio from "cheerio";
 import iconv from "iconv-lite";
+import { generateError } from "../middlewares";
 import { Time } from "../utils";
 
 /* ---------------- craw ---------------- */
@@ -94,7 +95,8 @@ export type CrawlerKey = keyof typeof crawler;
 export const crawlerKeyList = Object.keys(crawler);
 
 export const parse = (key: CrawlerKey) => {
-  const onCraw = crawler[key]
-  if (!onCraw) return console.error(key)
-  return onCraw()
+  if (!crawlerKeyList.some(v => v === key))
+    return generateError({ status: 400, message: "잘못된 contentType입니다." })
+
+  return crawler[key]()
 };

@@ -17,7 +17,7 @@ export const load_heroku_awaker = () => {
 export const load_QTConent_CronJob = () => {
   const rule = new schedule.RecurrenceRule();
   rule.hour = 16;
-  rule.minute = 10;
+  rule.minute = 30;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
@@ -26,34 +26,30 @@ export const load_QTConent_CronJob = () => {
 
     schedule.scheduleJob(rule, () => {
       UserService.findAll().then(async (data) => {
-        console.log("$$ start QT cron-job");
+        let jobs_done = 0
+        console.log("\n$$ start QT cron-job");
 
-        try {
-          for (const user of data) {
-            await Promise.all(
-              user.notions.map(async (v) => {
-                try {
-                  await NotionService.createQTPage({
-                    notion_auth: user.notion_auth,
-                    database_id: v.database_id,
-                    contentType: v.contentType
-                  });
-                } catch (e: any) {
-                  if (e.code === "object_not_found") {
-                    console.log(`$$ delete not found notion ${v.database_id} `)
-                    await UserService.deleteNotion({
-                      name: user.name,
-                      notion: v,
-                    })
-                  }
-                }
-              })
-            );
-          }
-          console.log(`$$ ${data.length} users done`);
-        } catch (e) {
-          console.log(`$$ error `, e)
+        for (const user of data) {
+          const { name, notion_auth, notions } = user
+
+          await Promise.all(
+            notions.map(async (notion) => {
+              try {
+                await NotionService.createQTPage({
+                  notion_auth,
+                  database_id: notion.database_id,
+                  contentType: notion.contentType
+                });
+                jobs_done++
+              } catch (e) {
+                console.log(`$$ delete error notion | ${name} ${notion.database_id} `)
+                await UserService.deleteNotion({ name, notion })
+              }
+            })
+          );
         }
+
+        console.log(`$$ ${jobs_done} jobs done\n`);
       });
     });
   }

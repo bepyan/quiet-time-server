@@ -16,6 +16,7 @@ exports.parse = exports.crawlerKeyList = void 0;
 const axios_1 = __importDefault(require("axios"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const iconv_lite_1 = __importDefault(require("iconv-lite"));
+const middlewares_1 = require("../middlewares");
 const utils_1 = require("../utils");
 /* ---------------- craw ---------------- */
 const links = {
@@ -95,10 +96,9 @@ const crawler = {
 };
 exports.crawlerKeyList = Object.keys(crawler);
 const parse = (key) => {
-    const onCraw = crawler[key];
-    if (!onCraw)
-        return console.error(key);
-    return onCraw();
+    if (!exports.crawlerKeyList.some(v => v === key))
+        return (0, middlewares_1.generateError)({ status: 400, message: "잘못된 contentType입니다." });
+    return crawler[key]();
 };
 exports.parse = parse;
 //# sourceMappingURL=CrawlerService.js.map
