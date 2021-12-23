@@ -30,7 +30,8 @@ export const create: RequestHandler[] = [
   body("notion_auth").notEmpty(),
   validatorErrorChecker,
   async (req, res) => {
-    const user = await UserService.createUser(req.body);
+    const { name, notion_auth } = req.body;
+    const user = await UserService.createUser({ name, notion_auth });
     res.send(user);
   },
 ];
