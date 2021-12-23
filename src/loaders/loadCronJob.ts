@@ -16,7 +16,7 @@ export const load_heroku_awaker = () => {
 
 export const load_QTConent_CronJob = () => {
   const rule = new schedule.RecurrenceRule();
-  rule.hour = 5;
+  rule.hour = 12;
   rule.minute = 0;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
@@ -28,17 +28,21 @@ export const load_QTConent_CronJob = () => {
       UserService.findAll().then(async (data) => {
         console.log("$$ start QT cron-job");
 
-        for (const user of data) {
-          await Promise.all(
-            user.notions.map(async (v) => {
-              await NotionService.createQTPage({
-                notion_auth: user.notion_auth,
-                ...v,
-              });
-            })
-          );
+        try {
+          for (const user of data) {
+            await Promise.all(
+              user.notions.map(async (v) => {
+                await NotionService.createQTPage({
+                  notion_auth: user.notion_auth,
+                  ...v,
+                });
+              })
+            );
+          }
+          console.log(`$$ ${data.length} jobs done`);
+        } catch (e) {
+          console.log(`$$ [Error] QT cron-job`, e)
         }
-        console.log(`$$ ${data.length} jobs done`);
       });
     });
   }
