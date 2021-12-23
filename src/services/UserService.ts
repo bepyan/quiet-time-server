@@ -21,6 +21,6 @@ export const addNotion = ({ name, notion }: SubscriptNotionDTO) => {
   return UserModel.updateOne({ name }, { $push: { notions: notion } });
 };
 
-export const delelteNotion = ({ name, notion }: SubscriptNotionDTO) => {
+export const deleteNotion = ({ name, notion }: SubscriptNotionDTO) => {
   return UserModel.updateOne({ name }, { $pull: { notions: notion } });
 };

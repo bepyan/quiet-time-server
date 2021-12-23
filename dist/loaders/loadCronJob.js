@@ -28,8 +28,8 @@ const load_heroku_awaker = () => {
 exports.load_heroku_awaker = load_heroku_awaker;
 const load_QTConent_CronJob = () => {
     const rule = new node_schedule_1.default.RecurrenceRule();
-    rule.hour = 15;
-    rule.minute = 30;
+    rule.hour = 16;
+    rule.minute = 10;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
     rule.tz = "Asia/Seoul";
     if (isHeroku()) {
@@ -40,18 +40,28 @@ const load_QTConent_CronJob = () => {
                 try {
                     for (const user of data) {
                         yield Promise.all(user.notions.map((v) => __awaiter(void 0, void 0, void 0, function* () {
-                            console.log(v);
-                            yield services_1.NotionService.createQTPage({
-                                notion_auth: user.notion_auth,
-                                database_id: v.database_id,
-                                contentType: v.contentType
-                            });
+                            try {
+                                yield services_1.NotionService.createQTPage({
+                                    notion_auth: user.notion_auth,
+                                    database_id: v.database_id,
+                                    contentType: v.contentType
+                                });
+                            }
+                            catch (e) {
+                                if (e.code === "object_not_found") {
+                                    console.log(`$$ delete not found notion ${v.database_id} `);
+                                    yield services_1.UserService.deleteNotion({
+                                        name: user.name,
+                                        notion: v,
+                                    });
+                                }
+                            }
                         })));
                     }
-                    console.log(`$$ ${data.length} jobs done`);
+                    console.log(`$$ ${data.length} users done`);
                 }
                 catch (e) {
-                    console.log(`$$ [Error] QT cron-job`, e);
+                    console.log(`$$ error `, e);
                 }
             }));
         });

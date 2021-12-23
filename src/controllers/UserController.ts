@@ -85,7 +85,7 @@ export const unSubscriptNotion: RequestHandler[] = [
   body("notion").notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
-    const user = await UserService.delelteNotion(req.body);
+    const user = await UserService.deleteNotion(req.body);
     res.send(user);
   }),
 ];
