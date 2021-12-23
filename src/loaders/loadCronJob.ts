@@ -77,6 +77,6 @@ export const load_QTContent_collector = () => {
         }
       }))
 
-    console.log(`$$ collecting jobs done ✨`);
+    console.log(`$$ collecting content done ✨`);
   })
 }
