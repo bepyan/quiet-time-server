@@ -74,6 +74,8 @@ const createQTPage = ({ notion_auth, database_id, contentType, }) => __awaiter(v
                 ].filter((v) => !!v);
             }, []),
             { paragraph: { text: [] } },
+            { paragraph: { text: [] } },
+            { divider: {} },
             {
                 toggle: {
                     text: [{ text: { content: "본문해설" } }],
@@ -82,10 +84,10 @@ const createQTPage = ({ notion_auth, database_id, contentType, }) => __awaiter(v
                         ...content.commentaries.map((text) => 2 < text.length && text.length < 30
                             ? { heading_3: { text: [{ text: { content: text } }] } }
                             : { paragraph: { text: [{ text: { content: text } }] } }),
-                        { divider: {} },
                     ],
                 },
             },
+            { divider: {} },
         ],
     });
 });

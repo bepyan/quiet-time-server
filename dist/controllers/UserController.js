@@ -33,20 +33,22 @@ exports.create = [
     (0, express_validator_1.body)("notion_auth").notEmpty(),
     middlewares_1.validatorErrorChecker,
     (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const user = yield services_1.UserService.createUser(req.body);
+        const { name, notion_auth } = req.body;
+        const user = yield services_1.UserService.createUser({ name, notion_auth });
         res.send(user);
     }),
 ];
 exports.createNotion = [
-    (0, express_validator_1.body)("name").notEmpty(),
+    (0, express_validator_1.param)("name").notEmpty(),
     (0, express_validator_1.body)("page_id").notEmpty(),
     (0, express_validator_1.body)("contentType").notEmpty().isIn(services_1.CrawlerService.crawlerKeyList),
     middlewares_1.validatorErrorChecker,
     (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, page_id, contentType } = req.body;
+        const { name } = req.params;
+        const { page_id, contentType } = req.body;
         const user = yield services_1.UserService.findUser({ name });
         if (!user) {
-            (0, middlewares_1.generateError)({ status: 404, message: "일치된 사용자가 없습니다." });
+            (0, middlewares_1.generateError)({ status: 400, message: "일치된 사용자가 없습니다." });
             return;
         }
         const { notion_auth } = user;
@@ -68,21 +70,29 @@ exports.createNotion = [
     })),
 ];
 exports.subscriptNotion = [
-    (0, express_validator_1.body)("name").notEmpty(),
+    (0, express_validator_1.param)("name").notEmpty(),
     (0, express_validator_1.body)("notion").notEmpty(),
     middlewares_1.validatorErrorChecker,
     (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, notion } = req.body;
+        const { name } = req.params;
+        const { notion } = req.body;
+        //  중복된 구독이면 에러
+        if (yield services_1.UserService.hasSubscript({ name, notion })) {
+            (0, middlewares_1.generateError)({ status: 400, message: "중복된 구독정보가 있습니다." });
+            return;
+        }
         const result = yield services_1.UserService.addNotion({ name, notion });
         res.send(result);
     })),
 ];
 exports.unSubscriptNotion = [
-    (0, express_validator_1.body)("name").notEmpty(),
+    (0, express_validator_1.param)("name").notEmpty(),
     (0, express_validator_1.body)("notion").notEmpty(),
     middlewares_1.validatorErrorChecker,
     (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const user = yield services_1.UserService.deleteNotion(req.body);
+        const { name } = req.params;
+        const { notion } = req.body;
+        const user = yield services_1.UserService.deleteNotion({ name, notion });
         res.send(user);
     })),
 ];

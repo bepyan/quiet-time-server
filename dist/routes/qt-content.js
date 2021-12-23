@@ -18,9 +18,14 @@ const middlewares_1 = require("../middlewares");
 const services_1 = require("../services");
 const router = express_1.default.Router();
 router.use("/", middlewares_1.decodeRequest);
-router.get("/:contentType", (0, express_validator_1.param)("contentType").notEmpty().isIn(services_1.CrawlerService.crawlerKeyList), middlewares_1.validatorErrorChecker, (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const content = yield services_1.CrawlerService.parse(req.params.contentType);
+router.get("/", (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const content = yield services_1.QTContentService.findAll();
+    res.send(content);
+})));
+router.get("/:contentType/:date", (0, express_validator_1.param)("contentType").notEmpty().isIn(services_1.CrawlerService.crawlerKeyList), (0, express_validator_1.param)("date").notEmpty(), middlewares_1.validatorErrorChecker, (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { contentType, date } = req.params;
+    const content = yield services_1.QTContentService.findOne({ contentType, date });
     res.send(content);
 })));
 exports.default = router;
-//# sourceMappingURL=bible.js.map
+//# sourceMappingURL=qt-content.js.map

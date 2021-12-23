@@ -43,6 +43,7 @@ const crawler = {
         const $ = cheerio_1.default.load(yield getHTML("생명의삶", "euc-kr"));
         const $commentary = cheerio_1.default.load(yield getHTML("생명의삶_해설", "euc-kr"));
         return {
+            contentType: "생명의삶",
             title: $("h1 span").text().trim(),
             range: $("h1 em").text().trim(),
             date: utils_1.Time.toYMDD(),
@@ -71,6 +72,7 @@ const crawler = {
     매일성경: () => __awaiter(void 0, void 0, void 0, function* () {
         const $ = cheerio_1.default.load(yield getHTML("매일성경"));
         return {
+            contentType: "매일성경",
             title: $(".bible_text").text().trim(),
             range: $("#mainView_2 .bibleinfo_box")
                 .text()

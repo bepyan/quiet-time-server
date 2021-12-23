@@ -41,7 +41,6 @@ const asyncErrorCatcher = (fn) => (req, res, next) => __awaiter(void 0, void 0, 
         yield fn(req, res, next);
     }
     catch (e) {
-        e.status = 500;
         next(e);
     }
 });

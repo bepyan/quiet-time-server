@@ -9,9 +9,9 @@ const router = express_1.default.Router();
 router.get("/", controllers_1.UserController.findAll);
 router.get("/:name", controllers_1.UserController.findOne);
 router.post("/", controllers_1.UserController.create);
-router.post("/notion", controllers_1.UserController.createNotion);
-router.post("/notion/subscription", controllers_1.UserController.subscriptNotion);
+router.post("/:name/notion", controllers_1.UserController.createNotion);
+router.post("/:name/notion/subscription", controllers_1.UserController.subscriptNotion);
 router.delete("/", controllers_1.UserController.deleteUser);
-router.delete("/notion/subscription", controllers_1.UserController.unSubscriptNotion);
+router.delete("/:name/notion/subscription", controllers_1.UserController.unSubscriptNotion);
 exports.default = router;
 //# sourceMappingURL=users.js.map
