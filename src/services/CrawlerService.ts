@@ -93,6 +93,8 @@ const crawler = {
 export type CrawlerKey = keyof typeof crawler;
 export const crawlerKeyList = Object.keys(crawler);
 
-export const parse = async (key: CrawlerKey) => {
-  return await crawler[key]();
+export const parse = (key: CrawlerKey) => {
+  const onCraw = crawler[key]
+  if (!onCraw) return console.error(key)
+  return onCraw()
 };

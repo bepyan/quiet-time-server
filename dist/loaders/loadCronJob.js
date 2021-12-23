@@ -28,7 +28,7 @@ const load_heroku_awaker = () => {
 exports.load_heroku_awaker = load_heroku_awaker;
 const load_QTConent_CronJob = () => {
     const rule = new node_schedule_1.default.RecurrenceRule();
-    rule.hour = 12;
+    rule.hour = 15;
     rule.minute = 0;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
     rule.tz = "Asia/Seoul";

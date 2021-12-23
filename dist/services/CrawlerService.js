@@ -94,8 +94,11 @@ const crawler = {
     }),
 };
 exports.crawlerKeyList = Object.keys(crawler);
-const parse = (key) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield crawler[key]();
-});
+const parse = (key) => {
+    const onCraw = crawler[key];
+    if (!onCraw)
+        return console.error(key);
+    return onCraw();
+};
 exports.parse = parse;
 //# sourceMappingURL=CrawlerService.js.map
