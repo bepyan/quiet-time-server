@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delelteNotion = exports.addNotion = exports.deleteUser = exports.createUser = exports.findUser = exports.findAll = void 0;
+exports.deleteNotion = exports.addNotion = exports.deleteUser = exports.createUser = exports.findUser = exports.findAll = void 0;
 const models_1 = require("../models");
 const findAll = () => {
     return models_1.UserModel.find();
@@ -22,8 +22,8 @@ const addNotion = ({ name, notion }) => {
     return models_1.UserModel.updateOne({ name }, { $push: { notions: notion } });
 };
 exports.addNotion = addNotion;
-const delelteNotion = ({ name, notion }) => {
+const deleteNotion = ({ name, notion }) => {
     return models_1.UserModel.updateOne({ name }, { $pull: { notions: notion } });
 };
-exports.delelteNotion = delelteNotion;
+exports.deleteNotion = deleteNotion;
 //# sourceMappingURL=UserService.js.map

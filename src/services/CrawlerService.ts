@@ -1,7 +1,8 @@
-import { QTContent } from "@types";
+import { IQTContent } from "@types";
 import axios from "axios";
 import cheerio from "cheerio";
 import iconv from "iconv-lite";
+import { generateError } from "../middlewares";
 import { Time } from "../utils";
 
 /* ---------------- craw ---------------- */
@@ -29,11 +30,12 @@ const getHTML = async (link: keyof typeof links, encoding = "utf-8") => {
 /* ---------------- parse ---------------- */
 
 const crawler = {
-  생명의삶: async (): Promise<QTContent> => {
+  생명의삶: async (): Promise<IQTContent> => {
     const $ = cheerio.load(await getHTML("생명의삶", "euc-kr"));
     const $commentary = cheerio.load(await getHTML("생명의삶_해설", "euc-kr"));
 
     return {
+      contentType: "생명의삶",
       title: $("h1 span").text().trim(),
       range: $("h1 em").text().trim(),
       date: Time.toYMDD(),
@@ -60,10 +62,11 @@ const crawler = {
     };
   },
 
-  매일성경: async (): Promise<QTContent> => {
+  매일성경: async (): Promise<IQTContent> => {
     const $ = cheerio.load(await getHTML("매일성경"));
 
     return {
+      contentType: "매일성경",
       title: $(".bible_text").text().trim(),
       range: $("#mainView_2 .bibleinfo_box")
         .text()
@@ -93,6 +96,9 @@ const crawler = {
 export type CrawlerKey = keyof typeof crawler;
 export const crawlerKeyList = Object.keys(crawler);
 
-export const parse = async (key: CrawlerKey) => {
-  return await crawler[key]();
+export const parse = (key: CrawlerKey) => {
+  if (!crawlerKeyList.some(v => v === key))
+    return generateError({ status: 400, message: "잘못된 contentType입니다." })
+
+  return crawler[key]()
 };

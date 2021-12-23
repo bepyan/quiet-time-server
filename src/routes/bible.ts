@@ -1,14 +1,11 @@
 import express from "express";
 import { param } from "express-validator";
-import { asyncErrorCatcher, validatorErrorChecker } from "../middlewares";
+import { asyncErrorCatcher, decodeRequest, validatorErrorChecker } from "../middlewares";
 import { CrawlerService } from "../services";
 
 const router = express.Router();
 
-router.use("/", (req, res, next) => {
-  req.url = decodeURIComponent(req.url);
-  next();
-});
+router.use("/", decodeRequest);
 
 router.get(
   "/:contentType",

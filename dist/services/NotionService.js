@@ -36,6 +36,8 @@ exports.createQTDatabase = createQTDatabase;
 const createQTPage = ({ notion_auth, database_id, contentType, }) => __awaiter(void 0, void 0, void 0, function* () {
     const notion = new client_1.Client({ auth: notion_auth });
     const content = yield services_1.CrawlerService.parse(contentType);
+    if (!content)
+        return;
     return notion.pages.create({
         parent: { database_id },
         icon: { emoji: "🤲🏻" },

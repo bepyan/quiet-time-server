@@ -82,7 +82,7 @@ exports.unSubscriptNotion = [
     (0, express_validator_1.body)("notion").notEmpty(),
     middlewares_1.validatorErrorChecker,
     (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const user = yield services_1.UserService.delelteNotion(req.body);
+        const user = yield services_1.UserService.deleteNotion(req.body);
         res.send(user);
     })),
 ];

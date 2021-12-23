@@ -28,21 +28,34 @@ const load_heroku_awaker = () => {
 exports.load_heroku_awaker = load_heroku_awaker;
 const load_QTConent_CronJob = () => {
     const rule = new node_schedule_1.default.RecurrenceRule();
-    rule.hour = 5;
-    rule.minute = 0;
+    rule.hour = 16;
+    rule.minute = 30;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
     rule.tz = "Asia/Seoul";
     if (isHeroku()) {
         console.log("$$ init corn setting");
         node_schedule_1.default.scheduleJob(rule, () => {
             services_1.UserService.findAll().then((data) => __awaiter(void 0, void 0, void 0, function* () {
-                console.log("$$ start QT cron-job");
+                let jobs_done = 0;
+                console.log("\n$$ start QT cron-job");
                 for (const user of data) {
-                    yield Promise.all(user.notions.map((v) => __awaiter(void 0, void 0, void 0, function* () {
-                        yield services_1.NotionService.createQTPage(Object.assign({ notion_auth: user.notion_auth }, v));
+                    const { name, notion_auth, notions } = user;
+                    yield Promise.all(notions.map((notion) => __awaiter(void 0, void 0, void 0, function* () {
+                        try {
+                            yield services_1.NotionService.createQTPage({
+                                notion_auth,
+                                database_id: notion.database_id,
+                                contentType: notion.contentType
+                            });
+                            jobs_done++;
+                        }
+                        catch (e) {
+                            console.log(`$$ delete error notion | ${name} ${notion.database_id} `);
+                            yield services_1.UserService.deleteNotion({ name, notion });
+                        }
                     })));
                 }
-                console.log(`$$ ${data.length} jobs done`);
+                console.log(`$$ ${jobs_done} jobs done\n`);
             }));
         });
     }

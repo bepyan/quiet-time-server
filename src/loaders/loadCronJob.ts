@@ -1,45 +1,82 @@
 import axios from "axios";
 import schedule from "node-schedule";
-import { NotionService, UserService } from "../services";
+import { CrawlerService, NotionService, QTContentService, UserService } from "../services";
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 
-const isHeroku = () => process.env.INSTANCE_ID === "0";
+const isHeroku = process.env.INSTANCE_ID === "0";
 
 export const load_heroku_awaker = () => {
-  if (isHeroku())
-    schedule.scheduleJob("*/20 * * * *", () => {
-      console.log("$$ awake heroku in every 20 min");
-      axios.get(`https://quiet-time-server.herokuapp.com/api`);
-    });
+  if (!isHeroku) return
+
+  schedule.scheduleJob("*/20 * * * *", () => {
+    console.log("$$ awake heroku in every 20 min");
+    axios.get(`https://quiet-time-server.herokuapp.com/api`);
+  });
 };
 
-export const load_QTConent_CronJob = () => {
+export const load_QTConent_publisher = () => {
+  if (!isHeroku) return
+
   const rule = new schedule.RecurrenceRule();
   rule.hour = 5;
   rule.minute = 0;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
-  if (isHeroku()) {
-    console.log("$$ init corn setting");
+  schedule.scheduleJob(rule, () => {
+    UserService.findAll().then(async (data) => {
+      let jobs_done = 0
+      console.log("$$ start publishing QT");
 
-    schedule.scheduleJob(rule, () => {
-      UserService.findAll().then(async (data) => {
-        console.log("$$ start QT cron-job");
+      for (const user of data) {
+        const { name, notion_auth, notions } = user
 
-        for (const user of data) {
-          await Promise.all(
-            user.notions.map(async (v) => {
+        await Promise.all(
+          notions.map(async (notion) => {
+            try {
               await NotionService.createQTPage({
-                notion_auth: user.notion_auth,
-                ...v,
+                notion_auth,
+                database_id: notion.database_id,
+                contentType: notion.contentType
               });
-            })
-          );
-        }
-        console.log(`$$ ${data.length} jobs done`);
-      });
+              jobs_done++
+            } catch (e) {
+              console.log(`$$ delete error notion | ${name} ${notion.database_id} `)
+              await UserService.deleteNotion({ name, notion })
+            }
+          })
+        );
+      }
+
+      console.log(`$$ ${jobs_done} content published ✨`);
     });
-  }
+  });
 };
+
+
+export const load_QTContent_collector = () => {
+  if (!isHeroku) return
+
+  const rule = new schedule.RecurrenceRule();
+  rule.hour = 1;
+  rule.minute = 0;
+  rule.dayOfWeek = [0, new schedule.Range(0, 6)];
+  rule.tz = "Asia/Seoul";
+
+  schedule.scheduleJob(rule, async () => {
+    console.log("$$ start collecting QT");
+
+    await Promise.all(
+      CrawlerService.crawlerKeyList.map(async (key) => {
+        try {
+          const content = await CrawlerService.parse(key as CrawlerService.CrawlerKey)
+          await QTContentService.createOne(content)
+        } catch (e) {
+          console.error(e)
+        }
+      }))
+
+    console.log(`$$ collecting content done ✨`);
+  })
+}
