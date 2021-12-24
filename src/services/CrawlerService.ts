@@ -96,6 +96,7 @@ const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent> =
 
   return {
     contentType,
+    date: Time.toYMDD(),
     title: $(".bible_text").text().trim(),
     range: $("#mainView_2 .bibleinfo_box")
       .text()
@@ -103,7 +104,6 @@ const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent> =
       .split(" ")
       .slice(2, 6)
       .join(" "),
-    date: Time.toYMDD(),
     verses: $(".body_list")
       .children()
       .map((_, elem) => ({
