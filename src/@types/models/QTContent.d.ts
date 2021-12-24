@@ -15,6 +15,6 @@ declare module "@types" {
 
   interface SearchQTContentDTO {
     contentType: ContentType;
-    date: string;
+    date?: string;
   }
 }

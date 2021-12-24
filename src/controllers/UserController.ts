@@ -5,7 +5,12 @@ import {
   generateError,
   validatorErrorChecker,
 } from "../middlewares";
-import { CrawlerService, NotionService, UserService } from "../services";
+import {
+  CrawlerService,
+  NotionService,
+  QTContentService,
+  UserService,
+} from "../services";
 
 /* ---------------- GET ---------------- */
 
@@ -44,25 +49,31 @@ export const createNotion: RequestHandler[] = [
   asyncErrorCatcher(async (req, res) => {
     const { name } = req.params;
     const { page_id, contentType } = req.body;
+    // 사용자 찾기
     const user = await UserService.findUser({ name });
-    if (!user) {
-      generateError({ status: 400, message: "일치된 사용자가 없습니다." });
-      return;
-    }
+    if (!user)
+      return generateError({
+        status: 400,
+        message: "일치된 사용자가 없습니다.",
+      });
     const { notion_auth } = user;
 
+    // 노션 데이터베이스 생성
     const database = await NotionService.createQTDatabase({
       notion_auth,
       page_id,
     });
     const database_id: string = database.id;
+    const content = await QTContentService.findOne({ contentType });
 
+    // 노션 페이지 생성
     await NotionService.createQTPage({
       notion_auth,
       database_id,
-      contentType,
+      content,
     });
 
+    // 구독 데이터 저장
     const result = await UserService.addNotion({
       name,
       notion: { database_id, contentType },

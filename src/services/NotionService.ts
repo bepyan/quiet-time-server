@@ -1,6 +1,5 @@
 import { Client } from "@notionhq/client";
 import { NotionDatabaseDTO, NotionPageDTO } from "@types";
-import { CrawlerService } from "../services";
 import { Time } from "../utils";
 
 export const createQTDatabase = async ({
@@ -20,30 +19,22 @@ export const createQTDatabase = async ({
       날짜: { date: {} },
     },
   });
-
-  await notion.databases.query({
-    database_id: data.id,
-    sorts: [{ property: "날짜", direction: "descending" }],
-  });
   return data;
 };
 
 export const createQTPage = async ({
   notion_auth,
   database_id,
-  contentType,
+  content,
 }: NotionPageDTO) => {
   const notion = new Client({ auth: notion_auth });
-
-  const content = await CrawlerService.parse(contentType);
-  if (!content) return;
 
   return notion.pages.create({
     parent: { database_id },
     icon: { emoji: "🤲🏻" },
     properties: {
       title: { title: [{ text: { content: content.range } }] },
-      큐티책: { rich_text: [{ text: { content: contentType } }] },
+      큐티책: { rich_text: [{ text: { content: content.contentType } }] },
       날짜: { date: { start: Time.toYMD() } },
     },
     children: [

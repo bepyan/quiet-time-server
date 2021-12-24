@@ -29,36 +29,7 @@ export const load_QTConent_publisher = () => {
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
-  schedule.scheduleJob(rule, () => {
-    UserService.findAll().then(async (data) => {
-      let jobs_done = 0;
-      console.log("$$ start publishing QT");
-
-      for (const user of data) {
-        const { name, notion_auth, notions } = user;
-
-        await Promise.all(
-          notions.map(async (notion) => {
-            try {
-              await NotionService.createQTPage({
-                notion_auth,
-                database_id: notion.database_id,
-                contentType: notion.contentType,
-              });
-              jobs_done++;
-            } catch (e) {
-              console.log(
-                `$$ delete error notion | ${name} ${notion.database_id} `
-              );
-              await UserService.deleteNotion({ name, notion });
-            }
-          })
-        );
-      }
-
-      console.log(`$$ ${jobs_done} content published ✨`);
-    });
-  });
+  schedule.scheduleJob(rule, QTContentService.publishToAllUser);
 };
 
 export const load_QTContent_collector = () => {
@@ -73,18 +44,7 @@ export const load_QTContent_collector = () => {
   schedule.scheduleJob(rule, async () => {
     console.log("$$ start collecting QT");
 
-    await Promise.all(
-      CrawlerService.crawlerKeyList.map(async (key) => {
-        try {
-          const content = await CrawlerService.parse(
-            key as CrawlerService.CrawlerKey
-          );
-          await QTContentService.createOne(content);
-        } catch (e) {
-          console.error(e);
-        }
-      })
-    );
+    await QTContentService.collectContent();
 
     console.log(`$$ collecting content done ✨`);
   });
