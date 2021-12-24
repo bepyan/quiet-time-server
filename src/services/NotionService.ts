@@ -1,7 +1,7 @@
 import { Client } from "@notionhq/client";
 import { NotionDatabaseDTO, NotionPageDTO } from "@types";
+import moment from "moment-timezone";
 import { CrawlerService } from "../services";
-import { Time } from "../utils";
 
 export const createQTDatabase = async ({
   notion_auth,
@@ -44,7 +44,7 @@ export const createQTPage = async ({
     properties: {
       title: { title: [{ text: { content: content.range } }] },
       큐티책: { rich_text: [{ text: { content: contentType } }] },
-      날짜: { date: { start: Time.toYMD() } },
+      날짜: { date: { start: moment.tz("Asia/Seoul").format("YYYY-MM-DD") } },
     },
     children: [
       {

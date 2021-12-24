@@ -8,11 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createQTPage = exports.createQTDatabase = void 0;
 const client_1 = require("@notionhq/client");
+const moment_timezone_1 = __importDefault(require("moment-timezone"));
 const services_1 = require("../services");
-const utils_1 = require("../utils");
 const createQTDatabase = ({ notion_auth, page_id, }) => __awaiter(void 0, void 0, void 0, function* () {
     const notion = new client_1.Client({ auth: notion_auth });
     const data = yield notion.databases.create({
@@ -44,7 +47,7 @@ const createQTPage = ({ notion_auth, database_id, contentType, }) => __awaiter(v
         properties: {
             title: { title: [{ text: { content: content.range } }] },
             큐티책: { rich_text: [{ text: { content: contentType } }] },
-            날짜: { date: { start: utils_1.Time.toYMD() } },
+            날짜: { date: { start: moment_timezone_1.default.tz("Asia/Seoul").format("YYYY-MM-DD") } },
         },
         children: [
             {
