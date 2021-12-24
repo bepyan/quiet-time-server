@@ -14,8 +14,8 @@ exports.QTContentModel = mongoose_1.default.model("QTContent", new mongoose_1.de
     verses: [
         {
             verse: String,
-            text: { type: String, required: true }
-        }
+            text: { type: String, required: true },
+        },
     ],
 }));
 //# sourceMappingURL=QTContent.js.map

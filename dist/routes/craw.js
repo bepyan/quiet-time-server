@@ -23,4 +23,4 @@ router.get("/:contentType", (0, express_validator_1.param)("contentType").notEmp
     res.send(content);
 })));
 exports.default = router;
-//# sourceMappingURL=bible.js.map
+//# sourceMappingURL=craw.js.map

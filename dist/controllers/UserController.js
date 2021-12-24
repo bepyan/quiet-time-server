@@ -46,22 +46,28 @@ exports.createNotion = [
     (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { name } = req.params;
         const { page_id, contentType } = req.body;
+        // 사용자 찾기
         const user = yield services_1.UserService.findUser({ name });
-        if (!user) {
-            (0, middlewares_1.generateError)({ status: 400, message: "일치된 사용자가 없습니다." });
-            return;
-        }
+        if (!user)
+            return (0, middlewares_1.generateError)({
+                status: 400,
+                message: "일치된 사용자가 없습니다.",
+            });
         const { notion_auth } = user;
+        // 노션 데이터베이스 생성
         const database = yield services_1.NotionService.createQTDatabase({
             notion_auth,
             page_id,
         });
         const database_id = database.id;
+        const content = yield services_1.QTContentService.findOne({ contentType });
+        // 노션 페이지 생성
         yield services_1.NotionService.createQTPage({
             notion_auth,
             database_id,
-            contentType,
+            content,
         });
+        // 구독 데이터 저장
         const result = yield services_1.UserService.addNotion({
             name,
             notion: { database_id, contentType },

@@ -35,51 +35,20 @@ const load_QTConent_publisher = () => {
     rule.minute = 0;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
     rule.tz = "Asia/Seoul";
-    node_schedule_1.default.scheduleJob(rule, () => {
-        services_1.UserService.findAll().then((data) => __awaiter(void 0, void 0, void 0, function* () {
-            let jobs_done = 0;
-            console.log("$$ start publishing QT");
-            for (const user of data) {
-                const { name, notion_auth, notions } = user;
-                yield Promise.all(notions.map((notion) => __awaiter(void 0, void 0, void 0, function* () {
-                    try {
-                        yield services_1.NotionService.createQTPage({
-                            notion_auth,
-                            database_id: notion.database_id,
-                            contentType: notion.contentType
-                        });
-                        jobs_done++;
-                    }
-                    catch (e) {
-                        console.log(`$$ delete error notion | ${name} ${notion.database_id} `);
-                        yield services_1.UserService.deleteNotion({ name, notion });
-                    }
-                })));
-            }
-            console.log(`$$ ${jobs_done} content published ✨`);
-        }));
-    });
+    node_schedule_1.default.scheduleJob(rule, services_1.QTContentService.publishToAllUser);
 };
 exports.load_QTConent_publisher = load_QTConent_publisher;
 const load_QTContent_collector = () => {
     if (!isHeroku)
         return;
     const rule = new node_schedule_1.default.RecurrenceRule();
-    rule.hour = 1;
-    rule.minute = 0;
+    rule.hour = 0;
+    rule.minute = 1;
     rule.dayOfWeek = [0, new node_schedule_1.default.Range(0, 6)];
     rule.tz = "Asia/Seoul";
     node_schedule_1.default.scheduleJob(rule, () => __awaiter(void 0, void 0, void 0, function* () {
         console.log("$$ start collecting QT");
-        yield Promise.all(services_1.CrawlerService.crawlerKeyList.map((key) => __awaiter(void 0, void 0, void 0, function* () {
-            try {
-                const content = yield services_1.CrawlerService.parse(key);
-                yield services_1.QTContentService.createOne(content);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        })));
+        yield services_1.QTContentService.collectContent();
         console.log(`$$ collecting content done ✨`);
     }));
 };

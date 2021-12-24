@@ -16,6 +16,7 @@ exports.parse = exports.crawlerKeyList = void 0;
 const axios_1 = __importDefault(require("axios"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const iconv_lite_1 = __importDefault(require("iconv-lite"));
+const puppeteer_1 = __importDefault(require("puppeteer"));
 const middlewares_1 = require("../middlewares");
 const utils_1 = require("../utils");
 /* ---------------- craw ---------------- */
@@ -42,7 +43,7 @@ const crawler = {
             contentType: "생명의삶",
             title: $("h1 span").text().trim(),
             range: $("h1 em").text().trim(),
-            date: utils_1.Time.toYMDD(),
+            date: utils_1.Time.toYMD(),
             verses: $(".bible")
                 .children()
                 .map((_, elem) => {
@@ -65,41 +66,66 @@ const crawler = {
             ],
         };
     }),
-    매일성경: () => __awaiter(void 0, void 0, void 0, function* () {
-        const $ = cheerio_1.default.load(yield getHTML(links.매일성경));
-        return {
-            contentType: "매일성경",
-            title: $(".bible_text").text().trim(),
-            range: $("#mainView_2 .bibleinfo_box")
-                .text()
-                .trim()
-                .split(" ")
-                .slice(2, 6)
-                .join(" "),
-            date: utils_1.Time.toYMDD(),
-            verses: $(".body_list")
-                .children()
-                .map((_, elem) => ({
-                verse: +$(elem).find(".num").text().trim(),
-                text: $(elem).find(".info").text().trim(),
-            }))
-                .toArray(),
-            commentaries: [
-                ...$(".body_cont")
-                    .children()
-                    .map((_, elem) => $(elem).html())
-                    .toArray()
-                    .flatMap((text) => text.split("<br>").map((v) => v.trim())),
-                "",
-            ],
-        };
-    }),
+    매일성경: () => parse매일성경("매일성경"),
+    "매일성경 순": () => parse매일성경("매일성경 순"),
+    "매일성경 청소년": () => parse매일성경("매일성경 청소년"),
+    "매일성경 영어": () => parse매일성경("매일성경 영어"),
 };
+const 매일성경inputs = {
+    "매일성경 순": "#please02",
+    "매일성경 청소년": "#please03",
+    "매일성경 영어": "#please07",
+};
+const load매일성경 = (key) => __awaiter(void 0, void 0, void 0, function* () {
+    const selector = 매일성경inputs[key];
+    // 매일성경은 radio input을 누를 필요가 없다.
+    if (!selector)
+        return cheerio_1.default.load(yield getHTML(links.매일성경));
+    const browser = yield puppeteer_1.default.launch({ headless: true });
+    const page = yield browser.newPage();
+    yield page.goto(links.매일성경);
+    yield page.evaluate((v) => document.querySelector(v).click(), selector);
+    // sleep
+    yield new Promise((resolve) => setTimeout(resolve, 2000));
+    const content = yield page.content();
+    yield browser.close();
+    return cheerio_1.default.load(content);
+});
+const parse매일성경 = (contentType) => __awaiter(void 0, void 0, void 0, function* () {
+    const $ = yield load매일성경(contentType);
+    return {
+        contentType,
+        date: utils_1.Time.toYMD(),
+        title: $(".bible_text").text().trim(),
+        range: $("#mainView_2 .bibleinfo_box")
+            .text()
+            .trim()
+            .split(" ")
+            .slice(2, 6)
+            .join(" "),
+        verses: $(".body_list")
+            .children()
+            .map((_, elem) => ({
+            verse: +$(elem).find(".num").text().trim(),
+            text: $(elem).find(".info").text().trim(),
+        }))
+            .toArray(),
+        commentaries: [
+            ...$(".body_cont")
+                .children()
+                .map((_, elem) => $(elem).html())
+                .toArray()
+                .flatMap((text) => text.split("<br>").map((v) => v.trim())),
+            "",
+        ],
+    };
+});
 exports.crawlerKeyList = Object.keys(crawler);
 const parse = (key) => {
-    if (!exports.crawlerKeyList.some(v => v === key))
+    const craw = crawler[key];
+    if (!craw)
         return (0, middlewares_1.generateError)({ status: 400, message: "잘못된 contentType입니다." });
-    return crawler[key]();
+    return craw();
 };
 exports.parse = parse;
 //# sourceMappingURL=CrawlerService.js.map
