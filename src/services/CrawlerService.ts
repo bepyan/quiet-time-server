@@ -28,7 +28,9 @@ const getHTML = async (url: string, encoding = "utf-8") => {
 const crawler = {
   생명의삶: async (): Promise<IQTContent> => {
     const $ = cheerio.load(await getHTML(links.생명의삶, "euc-kr"));
-    const $commentary = cheerio.load(await getHTML(links.생명의삶_해설, "euc-kr"));
+    const $commentary = cheerio.load(
+      await getHTML(links.생명의삶_해설, "euc-kr")
+    );
 
     return {
       contentType: "생명의삶",
@@ -96,8 +98,8 @@ export type CrawlerKey = keyof typeof crawler;
 export const crawlerKeyList = Object.keys(crawler);
 
 export const parse = (key: CrawlerKey) => {
-  if (!crawlerKeyList.some(v => v === key))
-    return generateError({ status: 400, message: "잘못된 contentType입니다." })
+  if (!crawlerKeyList.some((v) => v === key))
+    return generateError({ status: 400, message: "잘못된 contentType입니다." });
 
-  return crawler[key]()
+  return crawler[key]();
 };

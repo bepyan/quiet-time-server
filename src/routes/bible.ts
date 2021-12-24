@@ -1,6 +1,10 @@
 import express from "express";
 import { param } from "express-validator";
-import { asyncErrorCatcher, decodeRequest, validatorErrorChecker } from "../middlewares";
+import {
+  asyncErrorCatcher,
+  decodeRequest,
+  validatorErrorChecker,
+} from "../middlewares";
 import { CrawlerService } from "../services";
 
 const router = express.Router();

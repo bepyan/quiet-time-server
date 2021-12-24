@@ -36,7 +36,7 @@ export const createQTPage = async ({
   const notion = new Client({ auth: notion_auth });
 
   const content = await CrawlerService.parse(contentType);
-  if (!content) return
+  if (!content) return;
 
   return notion.pages.create({
     parent: { database_id },

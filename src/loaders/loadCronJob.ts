@@ -1,13 +1,18 @@
 import axios from "axios";
 import schedule from "node-schedule";
-import { CrawlerService, NotionService, QTContentService, UserService } from "../services";
+import {
+  CrawlerService,
+  NotionService,
+  QTContentService,
+  UserService,
+} from "../services";
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 
 const isHeroku = process.env.INSTANCE_ID === "0";
 
 export const load_heroku_awaker = () => {
-  if (!isHeroku) return
+  if (!isHeroku) return;
 
   schedule.scheduleJob("*/20 * * * *", () => {
     console.log("$$ awake heroku in every 20 min");
@@ -16,7 +21,7 @@ export const load_heroku_awaker = () => {
 };
 
 export const load_QTConent_publisher = () => {
-  if (!isHeroku) return
+  if (!isHeroku) return;
 
   const rule = new schedule.RecurrenceRule();
   rule.hour = 5;
@@ -26,11 +31,11 @@ export const load_QTConent_publisher = () => {
 
   schedule.scheduleJob(rule, () => {
     UserService.findAll().then(async (data) => {
-      let jobs_done = 0
+      let jobs_done = 0;
       console.log("$$ start publishing QT");
 
       for (const user of data) {
-        const { name, notion_auth, notions } = user
+        const { name, notion_auth, notions } = user;
 
         await Promise.all(
           notions.map(async (notion) => {
@@ -38,12 +43,14 @@ export const load_QTConent_publisher = () => {
               await NotionService.createQTPage({
                 notion_auth,
                 database_id: notion.database_id,
-                contentType: notion.contentType
+                contentType: notion.contentType,
               });
-              jobs_done++
+              jobs_done++;
             } catch (e) {
-              console.log(`$$ delete error notion | ${name} ${notion.database_id} `)
-              await UserService.deleteNotion({ name, notion })
+              console.log(
+                `$$ delete error notion | ${name} ${notion.database_id} `
+              );
+              await UserService.deleteNotion({ name, notion });
             }
           })
         );
@@ -54,9 +61,8 @@ export const load_QTConent_publisher = () => {
   });
 };
 
-
 export const load_QTContent_collector = () => {
-  if (!isHeroku) return
+  if (!isHeroku) return;
 
   const rule = new schedule.RecurrenceRule();
   rule.hour = 1;
@@ -70,13 +76,16 @@ export const load_QTContent_collector = () => {
     await Promise.all(
       CrawlerService.crawlerKeyList.map(async (key) => {
         try {
-          const content = await CrawlerService.parse(key as CrawlerService.CrawlerKey)
-          await QTContentService.createOne(content)
+          const content = await CrawlerService.parse(
+            key as CrawlerService.CrawlerKey
+          );
+          await QTContentService.createOne(content);
         } catch (e) {
-          console.error(e)
+          console.error(e);
         }
-      }))
+      })
+    );
 
     console.log(`$$ collecting content done ✨`);
-  })
-}
+  });
+};
