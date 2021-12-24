@@ -1,5 +1,5 @@
 import { SearchQTContentDTO } from "@types";
-import express from "express";
+import express, { query } from "express";
 import { param } from "express-validator";
 import {
   asyncErrorCatcher,
@@ -13,6 +13,8 @@ import { Time } from "../utils";
 const router = express.Router();
 
 router.use("/", decodeRequest);
+
+/* ---------------- get ---------------- */
 
 router.get(
   "/",
@@ -28,21 +30,8 @@ router.get(
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { contentType } = req.params;
-    const content = await QTContentService.findOne({
-      contentType,
-      date: Time.toYMD(),
-    } as SearchQTContentDTO);
-    res.send(content);
-  })
-);
+    const date = req.query.date || Time.toYMD();
 
-router.get(
-  "/:contentType/:date",
-  param("contentType").notEmpty().isIn(CrawlerService.crawlerKeyList),
-  param("date").notEmpty(),
-  validatorErrorChecker,
-  asyncErrorCatcher(async (req, res) => {
-    const { contentType, date } = req.params;
     const content = await QTContentService.findOne({
       contentType,
       date,
@@ -50,6 +39,10 @@ router.get(
     res.send(content);
   })
 );
+
+/* ---------------- post ---------------- */
+
+router.post("/collect", asyncErrorCatcher(QTContentService.collectContent));
 
 router.post(
   "/:name",
@@ -68,7 +61,5 @@ router.post(
     res.json({ job_done });
   })
 );
-
-router.post("/collect", asyncErrorCatcher(QTContentService.collectContent));
 
 export default router;
