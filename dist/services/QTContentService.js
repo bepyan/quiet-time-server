@@ -36,8 +36,10 @@ const deleteOne = ({ contentType, date }) => {
 };
 exports.deleteOne = deleteOne;
 const collectContent = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(`$$ start collect ${_1.CrawlerService.crawlerKeyList.length} contents`);
     yield Promise.all(_1.CrawlerService.crawlerKeyList.map((key) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            console.log(`$$ collecting ${key}`);
             const content = yield _1.CrawlerService.parse(key);
             yield (0, exports.createOne)(content);
         }
@@ -45,6 +47,7 @@ const collectContent = () => __awaiter(void 0, void 0, void 0, function* () {
             console.error(e);
         }
     })));
+    console.log(`$$ collect done ✨`);
 });
 exports.collectContent = collectContent;
 const publishContent = ({ notion_auth, notion: { database_id, contentType }, }) => __awaiter(void 0, void 0, void 0, function* () {

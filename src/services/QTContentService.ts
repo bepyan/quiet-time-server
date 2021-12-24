@@ -29,9 +29,13 @@ export const deleteOne = ({ contentType, date }: SearchQTContentDTO) => {
 };
 
 export const collectContent = async () => {
+  console.log(
+    `$$ start collect ${CrawlerService.crawlerKeyList.length} contents`
+  );
   await Promise.all(
     CrawlerService.crawlerKeyList.map(async (key) => {
       try {
+        console.log(`$$ collecting ${key}`);
         const content = await CrawlerService.parse(
           key as CrawlerService.CrawlerKey
         );
@@ -41,6 +45,7 @@ export const collectContent = async () => {
       }
     })
   );
+  console.log(`$$ collect done ✨`);
 };
 
 export const publishContent = async ({

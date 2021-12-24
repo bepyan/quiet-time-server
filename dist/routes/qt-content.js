@@ -34,7 +34,10 @@ router.get("/:contentType", (0, express_validator_1.param)("contentType").notEmp
     res.send(content);
 })));
 /* ---------------- post ---------------- */
-router.post("/collect", (0, middlewares_1.asyncErrorCatcher)(services_1.QTContentService.collectContent));
+router.post("/collect", (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield services_1.QTContentService.collectContent();
+    res.json({ message: "done" });
+})));
 router.post("/:name", (0, express_validator_1.param)("name").notEmpty(), middlewares_1.validatorErrorChecker, (0, middlewares_1.asyncErrorCatcher)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name } = req.params;
     const user = yield services_1.UserService.findUser({ name });

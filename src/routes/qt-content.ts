@@ -42,7 +42,13 @@ router.get(
 
 /* ---------------- post ---------------- */
 
-router.post("/collect", asyncErrorCatcher(QTContentService.collectContent));
+router.post(
+  "/collect",
+  asyncErrorCatcher(async (req, res) => {
+    await QTContentService.collectContent();
+    res.json({ message: "done" });
+  })
+);
 
 router.post(
   "/:name",
