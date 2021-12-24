@@ -37,7 +37,7 @@ const crawler = {
       contentType: "생명의삶",
       title: $("h1 span").text().trim(),
       range: $("h1 em").text().trim(),
-      date: Time.toYMDD(),
+      date: Time.toYMD(),
       verses: $(".bible")
         .children()
         .map((_, elem) => {
@@ -96,7 +96,7 @@ const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent> =
 
   return {
     contentType,
-    date: Time.toYMDD(),
+    date: Time.toYMD(),
     title: $(".bible_text").text().trim(),
     range: $("#mainView_2 .bibleinfo_box")
       .text()
