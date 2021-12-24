@@ -24,14 +24,10 @@ const links = {
     생명의삶_해설: "https://www.duranno.com/qt/view/explain.asp",
     매일성경: "https://sum.su.or.kr:8888/bible/today",
 };
-const getHTML = (link, encoding = "utf-8") => __awaiter(void 0, void 0, void 0, function* () {
+const getHTML = (url, encoding = "utf-8") => __awaiter(void 0, void 0, void 0, function* () {
     const html = yield (0, axios_1.default)({
-        url: links[link],
+        url,
         method: "GET",
-        headers: {
-            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-            Accept: "*/*",
-        },
         responseEncoding: "binary",
         responseType: "arraybuffer",
     });
@@ -40,8 +36,8 @@ const getHTML = (link, encoding = "utf-8") => __awaiter(void 0, void 0, void 0, 
 /* ---------------- parse ---------------- */
 const crawler = {
     생명의삶: () => __awaiter(void 0, void 0, void 0, function* () {
-        const $ = cheerio_1.default.load(yield getHTML("생명의삶", "euc-kr"));
-        const $commentary = cheerio_1.default.load(yield getHTML("생명의삶_해설", "euc-kr"));
+        const $ = cheerio_1.default.load(yield getHTML(links.생명의삶, "euc-kr"));
+        const $commentary = cheerio_1.default.load(yield getHTML(links.생명의삶_해설, "euc-kr"));
         return {
             contentType: "생명의삶",
             title: $("h1 span").text().trim(),
@@ -70,7 +66,7 @@ const crawler = {
         };
     }),
     매일성경: () => __awaiter(void 0, void 0, void 0, function* () {
-        const $ = cheerio_1.default.load(yield getHTML("매일성경"));
+        const $ = cheerio_1.default.load(yield getHTML(links.매일성경));
         return {
             contentType: "매일성경",
             title: $(".bible_text").text().trim(),
@@ -88,11 +84,14 @@ const crawler = {
                 text: $(elem).find(".info").text().trim(),
             }))
                 .toArray(),
-            commentaries: $(".body_cont")
-                .children()
-                .map((_, elem) => $(elem).html())
-                .toArray()
-                .flatMap((text) => text.split("<br>").map((v) => v.trim())),
+            commentaries: [
+                ...$(".body_cont")
+                    .children()
+                    .map((_, elem) => $(elem).html())
+                    .toArray()
+                    .flatMap((text) => text.split("<br>").map((v) => v.trim())),
+                "",
+            ],
         };
     }),
 };

@@ -13,17 +13,13 @@ const links = {
   매일성경: "https://sum.su.or.kr:8888/bible/today",
 };
 
-const getHTML = async (link: keyof typeof links, encoding = "utf-8") => {
+const getHTML = async (url: string, encoding = "utf-8") => {
   const html = await axios({
-    url: links[link],
+    url,
     method: "GET",
-    headers: {
-      "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-      Accept: "*/*",
-    },
     responseEncoding: "binary",
     responseType: "arraybuffer",
-  } as any);
+  });
   return iconv.decode(html.data, encoding);
 };
 
@@ -31,8 +27,8 @@ const getHTML = async (link: keyof typeof links, encoding = "utf-8") => {
 
 const crawler = {
   생명의삶: async (): Promise<IQTContent> => {
-    const $ = cheerio.load(await getHTML("생명의삶", "euc-kr"));
-    const $commentary = cheerio.load(await getHTML("생명의삶_해설", "euc-kr"));
+    const $ = cheerio.load(await getHTML(links.생명의삶, "euc-kr"));
+    const $commentary = cheerio.load(await getHTML(links.생명의삶_해설, "euc-kr"));
 
     return {
       contentType: "생명의삶",
@@ -63,7 +59,7 @@ const crawler = {
   },
 
   매일성경: async (): Promise<IQTContent> => {
-    const $ = cheerio.load(await getHTML("매일성경"));
+    const $ = cheerio.load(await getHTML(links.매일성경));
 
     return {
       contentType: "매일성경",
@@ -82,11 +78,14 @@ const crawler = {
           text: $(elem).find(".info").text().trim(),
         }))
         .toArray(),
-      commentaries: $(".body_cont")
-        .children()
-        .map((_, elem) => $(elem).html())
-        .toArray()
-        .flatMap((text) => text.split("<br>").map((v) => v.trim())),
+      commentaries: [
+        ...$(".body_cont")
+          .children()
+          .map((_, elem) => $(elem).html())
+          .toArray()
+          .flatMap((text) => text.split("<br>").map((v) => v.trim())),
+        "",
+      ],
     };
   },
 };
