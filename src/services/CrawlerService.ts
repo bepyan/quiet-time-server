@@ -79,7 +79,10 @@ const load매일성경 = async (key: string) => {
   // 매일성경은 radio input을 누를 필요가 없다.
   if (!selector) return cheerio.load(await getHTML(links.매일성경));
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
   await page.goto(links.매일성경);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
