@@ -3,16 +3,23 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import routers from "./routes";
-import { loadDB, load_heroku_awaker, load_QTContent_collector, load_QTConent_publisher } from "./loaders";
+import {
+  loadDB,
+  load_heroku_awaker,
+  load_QTContent_collector,
+  load_QTConent_publisher,
+} from "./loaders";
 import { errorResponser, errorLogger } from "./middlewares";
+import { BrowserService } from "./utils";
 
 const app = express();
 const PORT = process.env.PORT || 1234;
 
 loadDB();
-load_heroku_awaker()
+load_heroku_awaker();
 load_QTConent_publisher();
 load_QTContent_collector();
+BrowserService.loadBrowser();
 
 app.use(cors());
 

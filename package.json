@@ -33,8 +33,9 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node --files src/app.ts",
-    "serve": "tsc -p . && pm2-runtime start ecosystem.config.js",
+    "build": "tsc -p .",
+    "serve": "pm2-runtime start ecosystem.config.js",
     "prestart": "npm i -g pm2 && yarn install",
-    "start": "yarn prestart && yarn serve"
+    "start": "yarn build && yarn serve"
   }
 }

@@ -4,7 +4,7 @@ import cheerio from "cheerio";
 import iconv from "iconv-lite";
 import puppeteer from "puppeteer";
 import { generateError } from "../middlewares";
-import { Time } from "../utils";
+import { BrowserService, Time } from "../utils";
 
 /* ---------------- craw ---------------- */
 
@@ -79,28 +79,22 @@ const load매일성경 = async (key: string) => {
   // 매일성경은 radio input을 누를 필요가 없다.
   if (!selector) return cheerio.load(await getHTML(links.매일성경));
 
-  console.log("@@ 브라우저 실행");
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  const page = await browser.newPage();
+  const page = BrowserService.page!;
+
+  console.log("@@ QT본문으로 이동중...");
   await page.goto(links.매일성경);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
 
-  console.log("@@ QT본문으로 이동");
   // sleep
   await new Promise((resolve) => setTimeout(resolve, 2000));
   const content = await page.content();
-  await browser.close();
 
+  console.log("@@ QT본문 취합완료");
   return cheerio.load(content);
 };
 
 const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent> => {
   const $ = await load매일성경(contentType);
-
-  console.log("@@ QT본문 취합완료");
 
   return {
     contentType,
