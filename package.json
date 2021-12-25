@@ -19,9 +19,7 @@
     "moment-timezone": "^0.5.34",
     "mongoose": "^6.1.2",
     "node-schedule": "^2.1.0",
-    "puppeteer": "^13.0.1"
-  },
-  "devDependencies": {
+    "puppeteer": "^13.0.1",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/node": "^16.11.13",
@@ -34,10 +32,8 @@
   },
   "scripts": {
     "dev": "nodemon --watch \"src/**/*.ts\" --exec ts-node --files src/app.ts",
-    "rebuild": "rm -rf ./dist && yarn build && yarn start",
-    "build": "tsc -p .",
+    "serve": "tsc -p . && pm2-runtime start ecosystem.config.js",
     "prestart": "npm i -g pm2 && yarn install",
-    "start": "yarn prestart && yarn build && yarn serve",
-    "serve": "pm2-runtime start ecosystem.config.js"
+    "start": "yarn prestart && yarn serve"
   }
 }
