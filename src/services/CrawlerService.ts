@@ -79,6 +79,7 @@ const load매일성경 = async (key: string) => {
   // 매일성경은 radio input을 누를 필요가 없다.
   if (!selector) return cheerio.load(await getHTML(links.매일성경));
 
+  console.log("@@ 브라우저 실행");
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -86,6 +87,8 @@ const load매일성경 = async (key: string) => {
   const page = await browser.newPage();
   await page.goto(links.매일성경);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
+
+  console.log("@@ QT본문으로 이동");
   // sleep
   await new Promise((resolve) => setTimeout(resolve, 2000));
   const content = await page.content();
@@ -96,6 +99,8 @@ const load매일성경 = async (key: string) => {
 
 const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent> => {
   const $ = await load매일성경(contentType);
+
+  console.log("@@ QT본문 취합완료");
 
   return {
     contentType,
@@ -131,8 +136,15 @@ export type CrawlerKey = keyof typeof crawler;
 export const crawlerKeyList = Object.keys(crawler);
 
 export const parse = (key: CrawlerKey) => {
-  const craw = crawler[key];
-  if (!craw)
-    return generateError({ status: 400, message: "잘못된 contentType입니다." });
-  return craw();
+  try {
+    const craw = crawler[key];
+    if (!craw)
+      return generateError({
+        status: 400,
+        message: "잘못된 contentType입니다.",
+      });
+    return craw();
+  } catch (e) {
+    console.error(e);
+  }
 };

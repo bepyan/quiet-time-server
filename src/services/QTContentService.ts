@@ -15,7 +15,7 @@ export const findOne = async ({
     contentType,
     date,
   });
-  if (!content) content = await CrawlerService.parse(contentType);
+  if (!content) content = (await CrawlerService.parse(contentType)) || null;
 
   return content;
 };
@@ -39,7 +39,8 @@ export const collectContent = async () => {
         const content = await CrawlerService.parse(
           key as CrawlerService.CrawlerKey
         );
-        await createOne(content);
+        if (content) await createOne(content);
+        else console.error("$$ fail");
       } catch (e) {
         console.error(e);
       }
@@ -57,11 +58,12 @@ export const publishContent = async ({
 }) => {
   const content = await findOne({ contentType });
 
-  return NotionService.createQTPage({
-    notion_auth,
-    database_id,
-    content,
-  });
+  if (content)
+    return NotionService.createQTPage({
+      notion_auth,
+      database_id,
+      content,
+    });
 };
 
 export const publishToOneUser = async (user: IUser) => {

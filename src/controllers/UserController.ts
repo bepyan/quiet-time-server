@@ -66,6 +66,12 @@ export const createNotion: RequestHandler[] = [
     const database_id: string = database.id;
     const content = await QTContentService.findOne({ contentType });
 
+    if (!content)
+      return generateError({
+        status: 500,
+        message: "큐티본문 취득 실패..",
+      });
+
     // 노션 페이지 생성
     await NotionService.createQTPage({
       notion_auth,
