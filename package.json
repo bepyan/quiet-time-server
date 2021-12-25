@@ -2,6 +2,7 @@
   "name": "quiet-time-server",
   "description": "✨ Cron job Crawler with Notion API",
   "version": "1.0.0",
+  "license": "MIT",
   "packageManager": "yarn@1.22.1",
   "engines": {
     "node": "16.13.1",
