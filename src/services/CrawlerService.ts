@@ -87,7 +87,7 @@ const load매일성경 = async (key: string) => {
 
   console.log("@@ QT본문 취합중...");
   await page.evaluate((v) => document.querySelector(v).click(), selector);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await page.waitForTimeout(2000);
   const content = await page.content();
   await page.close();
 
