@@ -4,7 +4,7 @@ class Browser {
   browser: puppeteer.Browser | undefined;
 
   loadBrowser() {
-    console.log("$$ 브라우저 실행중..");
+    console.log("$$ 브라우저 여는중..");
     puppeteer
       .launch({
         headless: true,

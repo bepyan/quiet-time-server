@@ -104,18 +104,18 @@ const load매일성경 = async (key: string) => {
   const page = await BrowserService.browser?.newPage();
   if (!page) return console.error("$$ can't open browser page");
 
-  console.log(`\n@@ QT사이트로 이동중...`);
+  console.log(`@@ 브라우저 매일성경 사이트 접속중...`);
   await page.goto(links.매일성경);
 
   console.log(`@@ [ ${key} ]으로 이동중...`);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
   await page.waitForTimeout(2000);
 
-  console.log("@@ QT본문 취합중...");
+  console.log(`@@ [ ${key} ] 본문 취합중...`);
   const content = await page.content();
   await page.close();
 
-  console.log("@@ QT본문 취합완료 ✨");
+  console.log(`@@ [ ${key} ] 본문 취합완료 ✨`);
   return cheerio.load(content);
 };
 
@@ -145,7 +145,7 @@ const parse매일성경 = async (
   return {
     contentType,
     date: Time.toYMD(),
-    title: $(".bible_text").text().trim(),
+    title: $("#bible_text").text().trim(),
     range: {
       text: content,
       book,

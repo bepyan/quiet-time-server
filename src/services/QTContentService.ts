@@ -28,26 +28,38 @@ export const deleteOne = ({ contentType, date }: SearchQTContentDTO) => {
   return QTContentModel.deleteOne({ contentType, date });
 };
 
+/* ----------------  ---------------- */
+
 export const collectContent = async () => {
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log(
-    `$$ start collect ${CrawlerService.crawlerKeyList.length} contents`
+    `$$ start collect [ ${CrawlerService.crawlerKeyList.length} ] contents`
   );
-  await Promise.all(
-    CrawlerService.crawlerKeyList.map(async (key) => {
-      try {
-        console.log(`$$ collecting ${key}`);
-        const content = await CrawlerService.parse(
-          key as CrawlerService.CrawlerKey
-        );
-        if (content) await createOne(content);
-        else console.error("$$ fail");
-      } catch (e) {
-        console.error(e);
-      }
-    })
-  );
-  console.log(`$$ collect done ✨`);
+  const done = (
+    await Promise.all(
+      CrawlerService.crawlerKeyList.map(async (key) => {
+        try {
+          const content = await CrawlerService.parse(
+            key as CrawlerService.CrawlerKey
+          );
+          if (content) {
+            await createOne(content);
+            return true;
+          } else console.error(`$$ [ ${key} ] fail`);
+        } catch (e) {
+          console.error(e);
+        } finally {
+          return false;
+        }
+      })
+    )
+  ).filter((v) => !!v).length;
+
+  console.log(`$$ successfully collect ${done} contents ✨`);
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 };
+
+/* ----------------  ---------------- */
 
 export const publishContent = async ({
   notion_auth,
@@ -83,6 +95,7 @@ export const publishToOneUser = async (user: IUser) => {
 };
 
 export const publishToAllUser = async () => {
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log("$$ start publishing QT");
 
   const users = await UserService.findAll();
@@ -95,4 +108,5 @@ export const publishToAllUser = async () => {
   }
 
   console.log(`$$ ${jobs_done} content published ✨`);
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 };

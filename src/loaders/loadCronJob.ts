@@ -41,11 +41,5 @@ export const load_QTContent_collector = () => {
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
-  schedule.scheduleJob(rule, async () => {
-    console.log("$$ start collecting QT");
-
-    await QTContentService.collectContent();
-
-    console.log(`$$ collecting content done ✨`);
-  });
+  schedule.scheduleJob(rule, QTContentService.collectContent);
 };
