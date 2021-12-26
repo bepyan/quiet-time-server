@@ -42,7 +42,7 @@ export const createQTPage = async ({
         heading_1: { text: [{ text: { content: content.title } }] },
       },
       {
-        paragraph: { text: [{ text: { content: content.range } }] },
+        paragraph: { text: [{ text: { content: content.range.text } }] },
       },
       { paragraph: { text: [] } },
       ...content.verses.reduce((ac, { verse, text }, i) => {

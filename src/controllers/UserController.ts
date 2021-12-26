@@ -44,7 +44,7 @@ export const create: RequestHandler[] = [
 export const createNotion: RequestHandler[] = [
   param("name").notEmpty(),
   body("page_id").notEmpty(),
-  body("contentType").notEmpty().isIn(CrawlerService.crawlerKeyList),
+  body("contentType").isIn(CrawlerService.crawlerKeyList),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { name } = req.params;
