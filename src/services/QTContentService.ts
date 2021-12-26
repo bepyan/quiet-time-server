@@ -15,7 +15,10 @@ export const findOne = async ({
     contentType,
     date,
   });
-  if (!content) content = (await CrawlerService.parse(contentType)) || null;
+  if (!content) {
+    content = (await CrawlerService.parse(contentType)) || null;
+    if (content) await createOne(content);
+  }
 
   return content;
 };
