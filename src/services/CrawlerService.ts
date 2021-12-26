@@ -78,7 +78,7 @@ const crawler = {
           .filter((_, elem) => elem.tagName === "p")
           .map((_, elem) => $(elem).html())
           .toArray()
-          .flatMap((text) => text.split("<br>")),
+          .flatMap((text) => text.replace("&amp;", "&").split("<br>")),
         "",
       ],
     };
@@ -171,7 +171,9 @@ const parse매일성경 = async (
         .children()
         .map((_, elem) => $(elem).html())
         .toArray()
-        .flatMap((text) => text.split("<br>").map((v) => v.trim())),
+        .flatMap((text) =>
+          text.split("<br>").map((v) => v.replace("&amp;", "&").trim())
+        ),
       "",
     ],
   };
