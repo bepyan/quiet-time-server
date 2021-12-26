@@ -2,10 +2,9 @@ import puppeteer from "puppeteer";
 
 class Browser {
   browser: puppeteer.Browser | undefined;
-  page: puppeteer.Page | undefined;
 
   loadBrowser() {
-    console.log("$$ 브라우저 실행");
+    console.log("$$ 브라우저 실행중..");
     puppeteer
       .launch({
         headless: true,
@@ -13,9 +12,7 @@ class Browser {
       })
       .then((browser) => {
         this.browser = browser;
-        browser.newPage().then((page) => (this.page = page));
-
-        console.log("$$ 브라우저 페이지 준비완료 ✨");
+        console.log("$$ 브라우저 구동 완료 ✨");
       });
   }
 }

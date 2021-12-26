@@ -79,22 +79,27 @@ const load매일성경 = async (key: string) => {
   // 매일성경은 radio input을 누를 필요가 없다.
   if (!selector) return cheerio.load(await getHTML(links.매일성경));
 
-  const page = BrowserService.page!;
+  const page = await BrowserService.browser?.newPage();
+  if (!page) return console.error("$$ can't open browser page");
 
   console.log("@@ QT본문으로 이동중...");
   await page.goto(links.매일성경);
-  await page.evaluate((v) => document.querySelector(v).click(), selector);
 
-  // sleep
+  console.log("@@ QT본문 취합중...");
+  await page.evaluate((v) => document.querySelector(v).click(), selector);
   await new Promise((resolve) => setTimeout(resolve, 2000));
   const content = await page.content();
+  await page.close();
 
   console.log("@@ QT본문 취합완료");
   return cheerio.load(content);
 };
 
-const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent> => {
+const parse매일성경 = async (
+  contentType: CrawlerKey
+): Promise<IQTContent | undefined> => {
   const $ = await load매일성경(contentType);
+  if (!$) return;
 
   return {
     contentType,
