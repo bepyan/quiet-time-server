@@ -7,11 +7,17 @@ export const QTContentModel = mongoose.model<IQTContent>(
     contentType: { type: String, required: true },
     title: { type: String, required: true },
     date: { type: String, required: true },
-    range: { type: String, required: true },
+    range: {
+      text: String,
+      book: String,
+      start: { capter: Number, verse: Number },
+      end: { caper: Number, verse: Number },
+    },
     commentaries: [{ type: String }],
     verses: [
       {
-        verse: String,
+        capter: Number,
+        verse: Number,
         text: { type: String, required: true },
       },
     ],
