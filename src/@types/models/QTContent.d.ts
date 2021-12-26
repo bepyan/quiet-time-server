@@ -3,12 +3,18 @@ declare module "@types" {
     contentType: ContentType;
     title: string;
     date: string;
-    range: string;
+    range: {
+      text: string;
+      book: string;
+      start: { capter: number; verse: number };
+      end: { caper: number; verse: number };
+    };
     verses: IVerse[];
     commentaries: string[];
   }
 
   interface IVerse {
+    capter?: number;
     verse?: number;
     text: string;
   }

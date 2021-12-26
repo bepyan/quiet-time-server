@@ -32,10 +32,30 @@ const crawler = {
       await getHTML(links.생명의삶_해설, "euc-kr")
     );
 
+    // 예시
+    // 욥기 33 : 1~13
+    // 욥기 38 : 39~39:4
+    const range = $("h1 em").text().trim();
+    const book = range.slice(0, range.indexOf(" "));
+    const [startContent, endContent] = range
+      .substring(range.indexOf(" "))
+      .split("~")
+      .map((v) => v.trim());
+
+    const [startCapter, startVerse] = startContent.split(":").map((v) => +v);
+    const [endCapter, endVerse] = endContent.includes(":")
+      ? endContent.split(":").map((v) => +v)
+      : [startCapter, +endContent];
+
     return {
       contentType: "생명의삶",
       title: $("h1 span").text().trim(),
-      range: $("h1 em").text().trim(),
+      range: {
+        text: `${book} ${startCapter}:${startVerse} - ${endCapter}:${endVerse}`,
+        book,
+        start: { capter: startCapter, verse: startVerse },
+        end: { caper: endCapter, verse: endVerse },
+      },
       date: Time.toYMD(),
       verses: $(".bible")
         .children()
@@ -43,8 +63,11 @@ const crawler = {
           const $elem = $(elem);
           if (elem.tagName === "p") return { text: $elem.text().trim() };
 
+          const verse = +$elem.find("th").text().trim();
+          const capter = verse > startVerse ? startCapter : endCapter;
           return {
-            verse: +$elem.find("th").text().trim(),
+            capter,
+            verse,
             text: $elem.find("td").text().trim(),
           };
         })
@@ -81,10 +104,10 @@ const load매일성경 = async (key: string) => {
   const page = await BrowserService.browser?.newPage();
   if (!page) return console.error("$$ can't open browser page");
 
-  console.log("@@ QT사이트로 이동중...");
+  console.log(`\n@@ QT사이트로 이동중...`);
   await page.goto(links.매일성경);
 
-  console.log("@@ QT본문으로 이동중...");
+  console.log(`@@ [ ${key} ]으로 이동중...`);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
   await page.waitForTimeout(2000);
 
@@ -102,22 +125,45 @@ const parse매일성경 = async (
   const $ = await load매일성경(contentType);
   if (!$) return;
 
+  // 본문 : 골로새서(Colossians)1:1 - 1:14 찬송가 220장
+  // 본문 : 골로새서(Colossians)1:24 - 2:5 찬송가 200장
+  const content = $("#mainView_2 .bibleinfo_box")
+    .text()
+    .trim()
+    .substring(5)
+    .split("찬송가")[0]
+    .replace(/[a-z]/gi, "")
+    .replace("()", " ")
+    .replace("  ", " ")
+    .trim();
+
+  const [book, start, end] = content.replace(" - ", " ").split(" ");
+
+  const [startCapter, startVerse] = start.split(":").map((v) => +v);
+  const [endCapter, endVerse] = end.split(":").map((v) => +v);
+
   return {
     contentType,
     date: Time.toYMD(),
     title: $(".bible_text").text().trim(),
-    range: $("#mainView_2 .bibleinfo_box")
-      .text()
-      .trim()
-      .split(" ")
-      .slice(2, 6)
-      .join(" "),
+    range: {
+      text: content,
+      book,
+      start: { capter: startCapter, verse: startVerse },
+      end: { caper: endCapter, verse: endVerse },
+    },
     verses: $(".body_list")
       .children()
-      .map((_, elem) => ({
-        verse: +$(elem).find(".num").text().trim(),
-        text: $(elem).find(".info").text().trim(),
-      }))
+      .map((_, elem) => {
+        const $elem = $(elem);
+        const verse = +$elem.find(".num").text().trim();
+        const capter = verse > startVerse ? startCapter : endCapter;
+        return {
+          capter,
+          verse,
+          text: $elem.find(".info").text().trim(),
+        };
+      })
       .toArray(),
     commentaries: [
       ...$(".body_cont")

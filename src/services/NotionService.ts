@@ -33,7 +33,7 @@ export const createQTPage = async ({
     parent: { database_id },
     icon: { emoji: "🤲🏻" },
     properties: {
-      title: { title: [{ text: { content: content.range } }] },
+      title: { title: [{ text: { content: content.range.text } }] },
       큐티책: { rich_text: [{ text: { content: content.contentType } }] },
       날짜: { date: { start: Time.toYMD() } },
     },
