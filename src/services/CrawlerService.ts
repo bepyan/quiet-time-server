@@ -75,6 +75,7 @@ const crawler = {
       commentaries: [
         ...$commentary(".bible")
           .children()
+          .filter((_, elem) => elem.tagName === "p")
           .map((_, elem) => $(elem).html())
           .toArray()
           .flatMap((text) => text.split("<br>")),
