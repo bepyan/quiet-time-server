@@ -1,11 +1,6 @@
 import axios from "axios";
 import schedule from "node-schedule";
-import {
-  CrawlerService,
-  NotionService,
-  QTContentService,
-  UserService,
-} from "../services";
+import { QTContentService } from "../services";
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 
@@ -37,7 +32,7 @@ export const load_QTContent_collector = () => {
 
   const rule = new schedule.RecurrenceRule();
   rule.hour = 22;
-  rule.minute = 40;
+  rule.minute = 55;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
