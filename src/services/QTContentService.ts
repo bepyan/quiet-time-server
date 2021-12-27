@@ -31,33 +31,37 @@ export const deleteOne = ({ contentType, date }: SearchQTContentDTO) => {
   return QTContentModel.deleteOne({ contentType, date });
 };
 
+export const deleteToday = () => {
+  return QTContentModel.deleteMany({ date: Time.toYMD() });
+};
+
 /* ----------------  ---------------- */
 
 export const collectContent = async () => {
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  const { deletedCount } = await deleteToday();
+  console.log(`$$ clean today's ${deletedCount} contents`);
+
   console.log(
     `$$ start collect [ ${CrawlerService.crawlerKeyList.length} ] contents`
   );
 
   let done = 0;
-  await Promise.all(
-    CrawlerService.crawlerKeyList.map(async (key) => {
-      try {
-        const content = await CrawlerService.parse(
-          key as CrawlerService.CrawlerKey
-        );
-        if (content) {
-          console.log(content.verses[0].text);
-          await createOne(content);
-          done++;
-        } else {
-          console.error(`$$ [ ${key} ] fail`);
-        }
-      } catch (e) {
-        console.error(e);
+  for (const key of CrawlerService.crawlerKeyList) {
+    try {
+      const content = await CrawlerService.parse(
+        key as CrawlerService.CrawlerKey
+      );
+      if (content) {
+        await createOne(content);
+        done++;
+      } else {
+        console.error(`$$ [ ${key} ] fail`);
       }
-    })
-  );
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   console.log(`$$ successfully collect ${done} contents ✨`);
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

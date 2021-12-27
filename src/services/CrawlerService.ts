@@ -7,7 +7,7 @@ import { BrowserService, Time } from "../utils";
 
 /* ---------------- craw ---------------- */
 
-const links = {
+export const links = {
   생명의삶: "https://www.duranno.com/qt/view/bible.asp",
   생명의삶_해설: "https://www.duranno.com/qt/view/explain.asp",
   매일성경: "https://sum.su.or.kr:8888/bible/today",
@@ -102,19 +102,15 @@ const load매일성경 = async (key: string) => {
   // 매일성경은 radio input을 누를 필요가 없다.
   if (!selector) return cheerio.load(await getHTML(links.매일성경));
 
-  const page = await BrowserService.browser?.newPage();
+  const page = await BrowserService.매일성경page;
   if (!page) return console.error("$$ can't open browser page");
-
-  console.log(`@@ 브라우저 매일성경 사이트 접속중...`);
-  await page.goto(links.매일성경, { waitUntil: "load", timeout: 0 });
 
   console.log(`@@ [ ${key} ]으로 이동중...`);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
-  await page.waitForTimeout(6000);
+  await page.waitForTimeout(5000);
 
   console.log(`@@ [ ${key} ] 본문 취합중...`);
   const content = await page.content();
-  await page.close();
 
   console.log(`@@ [ ${key} ] 본문 취합완료 ✨`);
   return cheerio.load(content);

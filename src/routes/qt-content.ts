@@ -68,4 +68,14 @@ router.post(
   })
 );
 
+/* ---------------- delete ---------------- */
+
+router.delete(
+  "/today",
+  asyncErrorCatcher(async (req, res) => {
+    const result = await QTContentService.deleteToday();
+    return res.send(result);
+  })
+);
+
 export default router;

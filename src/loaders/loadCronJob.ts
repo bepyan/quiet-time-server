@@ -32,7 +32,7 @@ export const load_QTContent_collector = () => {
 
   const rule = new schedule.RecurrenceRule();
   rule.hour = 23;
-  rule.minute = 15;
+  rule.minute = 50;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
