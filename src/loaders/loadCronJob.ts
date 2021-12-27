@@ -31,8 +31,8 @@ export const load_QTContent_collector = () => {
   if (!isHeroku) return;
 
   const rule = new schedule.RecurrenceRule();
-  rule.hour = 23;
-  rule.minute = 50;
+  rule.hour = 0;
+  rule.minute = 2;
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = "Asia/Seoul";
 
