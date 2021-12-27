@@ -47,6 +47,7 @@ export const collectContent = async () => {
           key as CrawlerService.CrawlerKey
         );
         if (content) {
+          console.log(content.verses[0].text);
           await createOne(content);
           done++;
         } else {
