@@ -110,7 +110,7 @@ const load매일성경 = async (key: string) => {
 
   console.log(`@@ [ ${key} ]으로 이동중...`);
   await page.evaluate((v) => document.querySelector(v).click(), selector);
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(3000);
 
   console.log(`@@ [ ${key} ] 본문 취합중...`);
   const content = await page.content();
