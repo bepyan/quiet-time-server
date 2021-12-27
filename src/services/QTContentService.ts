@@ -38,25 +38,25 @@ export const collectContent = async () => {
   console.log(
     `$$ start collect [ ${CrawlerService.crawlerKeyList.length} ] contents`
   );
-  const done = (
-    await Promise.all(
-      CrawlerService.crawlerKeyList.map(async (key) => {
-        try {
-          const content = await CrawlerService.parse(
-            key as CrawlerService.CrawlerKey
-          );
-          if (content) {
-            await createOne(content);
-            return true;
-          } else console.error(`$$ [ ${key} ] fail`);
-        } catch (e) {
-          console.error(e);
-        } finally {
-          return false;
+
+  let done = 0;
+  await Promise.all(
+    CrawlerService.crawlerKeyList.map(async (key) => {
+      try {
+        const content = await CrawlerService.parse(
+          key as CrawlerService.CrawlerKey
+        );
+        if (content) {
+          await createOne(content);
+          done++;
+        } else {
+          console.error(`$$ [ ${key} ] fail`);
         }
-      })
-    )
-  ).filter((v) => !!v).length;
+      } catch (e) {
+        console.error(e);
+      }
+    })
+  );
 
   console.log(`$$ successfully collect ${done} contents ✨`);
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
