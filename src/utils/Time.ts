@@ -16,3 +16,10 @@ export const toYMD = (target: DateValue = new Date()) => {
 export const toYMDD = (target: DateValue = new Date()) => {
   return moment(target).tz("Asia/Seoul").format("YYYY년 MM월 DD일 dddd");
 };
+
+export const toYesterday = (target: DateValue = new Date()) => {
+  return moment(target)
+    .tz("Asia/Seoul")
+    .subtract(1, "days")
+    .format("YYYY-MM-DD");
+};

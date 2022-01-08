@@ -1,5 +1,7 @@
 import { IUser, INotion, IQTContent, SearchQTContentDTO } from "@types";
-import { CrawlerService, NotionService, UserService } from ".";
+import { generateKey } from "crypto";
+import { CrawlerService, EmailService, NotionService, UserService } from ".";
+import { generateError } from "../middlewares";
 import { QTContentModel } from "../models";
 import { Time } from "../utils";
 
@@ -11,15 +13,29 @@ export const findOne = async ({
   contentType,
   date = Time.toYMD(),
 }: SearchQTContentDTO) => {
-  let content: IQTContent | null = await QTContentModel.findOne({
+  const databaseContent: IQTContent | null = await QTContentModel.findOne({
     contentType,
     date,
   });
-  if (!content) {
-    content = (await CrawlerService.parse(contentType)) || null;
-    if (content) await createOne(content);
-  }
+  if (!!databaseContent) return databaseContent;
 
+  const yesterdayContent: IQTContent | null = await QTContentModel.findOne({
+    contentType,
+    date: Time.toYesterday(date),
+  });
+
+  const content = await CrawlerService.parse(contentType);
+
+  if (
+    !content ||
+    (yesterdayContent && content.title === yesterdayContent.title)
+  )
+    throw generateError({
+      status: 500,
+      message: "데이터 수직과정에서 에러가 발생했습니다.",
+    });
+
+  await createOne(content);
   return content;
 };
 
@@ -56,6 +72,11 @@ export const collectContent = async () => {
         await createOne(content);
         done++;
       } else {
+        EmailService.sendMail({
+          to: "bepyan@naver.com",
+          subject: "[ Quiet Time ] 성경 본문 취합 실패",
+          html: `${key} 취합 실패`,
+        });
         console.error(`$$ [ ${key} ] fail`);
       }
     } catch (e) {
