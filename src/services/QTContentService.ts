@@ -32,7 +32,7 @@ export const findOne = async ({
   )
     throw generateError({
       status: 500,
-      message: "데이터 수직과정에서 에러가 발생했습니다.",
+      message: "데이터 수집과정에서 에러가 발생했습니다.",
     });
 
   await createOne(content);

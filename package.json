@@ -3,11 +3,6 @@
   "description": "✨ Cron job Crawler with Notion API",
   "version": "1.0.0",
   "license": "MIT",
-  "packageManager": "yarn@1.22.1",
-  "engines": {
-    "node": "16.13.1",
-    "npm": "8.1.2"
-  },
   "dependencies": {
     "@notionhq/client": "^0.4.11",
     "@types/cors": "^2.8.12",
