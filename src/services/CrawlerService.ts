@@ -1,24 +1,25 @@
-import { IQTContent } from "@types";
-import axios from "axios";
-import cheerio from "cheerio";
-import iconv from "iconv-lite";
-import { generateError } from "../middlewares";
-import { BrowserService, Time } from "../utils";
+import { IQTContent } from '@types';
+import axios from 'axios';
+import cheerio from 'cheerio';
+import iconv from 'iconv-lite';
+import { generateError } from '../middlewares';
+import { BrowserService, Time } from '../utils';
 
 /* ---------------- craw ---------------- */
 
 export const links = {
-  생명의삶: "https://www.duranno.com/qt/view/bible.asp",
-  생명의삶_해설: "https://www.duranno.com/qt/view/explain.asp",
-  매일성경: "https://sum.su.or.kr:8888/bible/today",
+  생명의삶: 'https://www.duranno.com/qt/view/bible.asp?d=k',
+  생명의삶_우리말: 'https://www.duranno.com/qt/view/bible.asp?d=w',
+  생명의삶_해설: 'https://www.duranno.com/qt/view/explain.asp',
+  매일성경: 'https://sum.su.or.kr:8888/bible/today',
 };
 
-const getHTML = async (url: string, encoding = "utf-8") => {
+const getHTML = async (url: string, encoding = 'utf-8') => {
   const html = await axios({
     url,
-    method: "GET",
-    responseEncoding: "binary",
-    responseType: "arraybuffer",
+    method: 'GET',
+    responseEncoding: 'binary',
+    responseType: 'arraybuffer',
   });
   return iconv.decode(html.data, encoding);
 };
@@ -26,75 +27,82 @@ const getHTML = async (url: string, encoding = "utf-8") => {
 /* ---------------- parse ---------------- */
 
 const crawler = {
-  생명의삶: async (): Promise<IQTContent> => {
-    const $ = cheerio.load(await getHTML(links.생명의삶, "euc-kr"));
-    const $commentary = cheerio.load(
-      await getHTML(links.생명의삶_해설, "euc-kr")
-    );
-
-    // 예시
-    // 욥기 33 : 1~13
-    // 욥기 38 : 39~39:4
-    const range = $("h1 em").text().trim();
-    const book = range.slice(0, range.indexOf(" "));
-    const [startContent, endContent] = range
-      .substring(range.indexOf(" "))
-      .split("~")
-      .map((v) => v.trim());
-
-    const [startCapter, startVerse] = startContent.split(":").map((v) => +v);
-    const [endCapter, endVerse] = endContent.includes(":")
-      ? endContent.split(":").map((v) => +v)
-      : [startCapter, +endContent];
-
-    return {
-      contentType: "생명의삶",
-      title: $("h1 span").text().trim(),
-      range: {
-        text: `${book} ${startCapter}:${startVerse} - ${endCapter}:${endVerse}`,
-        book,
-        start: { capter: startCapter, verse: startVerse },
-        end: { caper: endCapter, verse: endVerse },
-      },
-      date: Time.toYMD(),
-      verses: $(".bible")
-        .children()
-        .map((_, elem) => {
-          const $elem = $(elem);
-          if (elem.tagName === "p") return { text: $elem.text().trim() };
-
-          const verse = +$elem.find("th").text().trim();
-          const capter = verse > startVerse ? startCapter : endCapter;
-          return {
-            capter,
-            verse,
-            text: $elem.find("td").text().trim(),
-          };
-        })
-        .toArray(),
-      commentaries: [
-        ...$commentary(".bible")
-          .children()
-          .filter((_, elem) => elem.tagName === "p")
-          .map((_, elem) => $(elem).html())
-          .toArray()
-          .flatMap((text) => text.replace("&amp;", "&").split("<br>")),
-        "",
-      ],
-    };
-  },
-  매일성경: () => parse매일성경("매일성경"),
-  "매일성경 순": () => parse매일성경("매일성경 순"),
-  "매일성경 청소년": () => parse매일성경("매일성경 청소년"),
-  "매일성경 영어": () => parse매일성경("매일성경 영어"),
+  생명의삶: () => parse생명의삶(links.생명의삶),
+  '생명의삶 우리말': () => parse생명의삶(links.생명의삶_우리말),
+  매일성경: () => parse매일성경('매일성경'),
+  '매일성경 순': () => parse매일성경('매일성경 순'),
+  '매일성경 청소년': () => parse매일성경('매일성경 청소년'),
+  '매일성경 영어': () => parse매일성경('매일성경 영어'),
 };
+
+// ----------------------------------------------------------------
+
+const parse생명의삶 = async (link: string): Promise<IQTContent> => {
+  const $ = cheerio.load(await getHTML(link, 'euc-kr'));
+  const $commentary = cheerio.load(
+    await getHTML(links.생명의삶_해설, 'euc-kr')
+  );
+
+  // 예시
+  // 욥기 33 : 1~13
+  // 욥기 38 : 39~39:4
+  const range = $('h1 em').text().trim();
+  const book = range.slice(0, range.indexOf(' '));
+  const [startContent, endContent] = range
+    .substring(range.indexOf(' '))
+    .split('~')
+    .map((v) => v.trim());
+
+  const [startCapter, startVerse] = startContent.split(':').map((v) => +v);
+  const [endCapter, endVerse] = endContent.includes(':')
+    ? endContent.split(':').map((v) => +v)
+    : [startCapter, +endContent];
+
+  return {
+    contentType: '생명의삶',
+    title: $('h1 span').text().trim(),
+    range: {
+      text: `${book} ${startCapter}:${startVerse} - ${endCapter}:${endVerse}`,
+      book,
+      start: { capter: startCapter, verse: startVerse },
+      end: { caper: endCapter, verse: endVerse },
+    },
+    date: Time.toYMD(),
+    verses: $('.bible')
+      .children()
+      .map((_, elem) => {
+        const $elem = $(elem);
+        if (elem.tagName === 'p') return { text: $elem.text().trim() };
+
+        const verse = +$elem.find('th').text().trim();
+        const capter = verse > startVerse ? startCapter : endCapter;
+        return {
+          capter,
+          verse,
+          text: $elem.find('td').text().trim(),
+        };
+      })
+      .toArray(),
+    commentaries: [
+      ...$commentary('.bible')
+        .children()
+        .filter((_, elem) => elem.tagName === 'p')
+        .map((_, elem) => $(elem).html())
+        .toArray()
+        .flatMap((text) => text.replace('&amp;', '&').split('<br>')),
+      '',
+    ],
+  };
+};
+
+// ----------------------------------------------------------------
 
 const 매일성경inputs: {
   [key: string]: string;
 } = {
-  "매일성경 순": "#please02",
-  "매일성경 청소년": "#please03",
-  "매일성경 영어": "#please07",
+  '매일성경 순': '#please02',
+  '매일성경 청소년': '#please03',
+  '매일성경 영어': '#please07',
 };
 
 const load매일성경 = async (key: string) => {
@@ -186,7 +194,7 @@ export const parse = (key: CrawlerKey) => {
     if (!craw)
       return generateError({
         status: 400,
-        message: "잘못된 contentType입니다.",
+        message: '잘못된 contentType입니다.',
       });
     return craw();
   } catch (e) {

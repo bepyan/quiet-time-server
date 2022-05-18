@@ -1,5 +1,5 @@
 import { SearchQTContentDTO } from '@types';
-import express, { query } from 'express';
+import express from 'express';
 import { param } from 'express-validator';
 import {
   asyncErrorCatcher,
