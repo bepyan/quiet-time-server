@@ -124,53 +124,53 @@ const parse매일성경 = async (
 
   // 본문 : 골로새서(Colossians)1:1 - 1:14 찬송가 220장
   // 본문 : 골로새서(Colossians)1:24 - 2:5 찬송가 200장
-  const content = $("#mainView_2 .bibleinfo_box")
+  // 본문 : 사무엘상(1 Samuel)8:1 - 8:22 찬송가 67장
+  const content = $('#mainView_2 .bibleinfo_box')
     .text()
     .trim()
     .substring(5)
-    .split("찬송가")[0]
-    .replace(/[a-z]/gi, "")
-    .replace("()", " ")
-    .replace("  ", " ")
+    .split('찬송가')[0]
     .trim();
 
-  const [book, start, end] = content.replace(" - ", " ").split(" ");
+  const book = content.split('(')[0].trim();
+  const verses = content.split(')')[1].trim();
 
-  const [startCapter, startVerse] = start.split(":").map((v) => +v);
-  const [endCapter, endVerse] = end.split(":").map((v) => +v);
+  const [start, end] = verses.split(' - ');
+  const [startCapter, startVerse] = start.split(':').map((v) => +v);
+  const [endCapter, endVerse] = end.split(':').map((v) => +v);
 
   return {
     contentType,
     date: Time.toYMD(),
-    title: $("#bible_text").text().trim(),
+    title: $('#bible_text').text().trim(),
     range: {
       text: content,
       book,
       start: { capter: startCapter, verse: startVerse },
       end: { caper: endCapter, verse: endVerse },
     },
-    verses: $(".body_list")
+    verses: $('.body_list')
       .children()
       .map((_, elem) => {
         const $elem = $(elem);
-        const verse = +$elem.find(".num").text().trim();
+        const verse = +$elem.find('.num').text().trim();
         const capter = verse > startVerse ? startCapter : endCapter;
         return {
           capter,
           verse,
-          text: $elem.find(".info").text().trim(),
+          text: $elem.find('.info').text().trim(),
         };
       })
       .toArray(),
     commentaries: [
-      ...$(".body_cont")
+      ...$('.body_cont')
         .children()
         .map((_, elem) => $(elem).html())
         .toArray()
         .flatMap((text) =>
-          text.split("<br>").map((v) => v.replace("&amp;", "&").trim())
+          text.split('<br>').map((v) => v.replace('&amp;', '&').trim())
         ),
-      "",
+      '',
     ],
   };
 };

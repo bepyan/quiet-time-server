@@ -1,9 +1,8 @@
-import { IUser, INotion, IQTContent, SearchQTContentDTO } from "@types";
-import { generateKey } from "crypto";
-import { CrawlerService, EmailService, NotionService, UserService } from ".";
-import { generateError } from "../middlewares";
-import { QTContentModel } from "../models";
-import { Time } from "../utils";
+import { IUser, INotion, IQTContent, SearchQTContentDTO } from '@types';
+import { CrawlerService, EmailService, NotionService, UserService } from '.';
+import { generateError } from '../middlewares';
+import { QTContentModel } from '../models';
+import { Time } from '../utils';
 
 export const findAll = () => {
   return QTContentModel.find();
@@ -32,7 +31,7 @@ export const findOne = async ({
   )
     throw generateError({
       status: 500,
-      message: "데이터 수집과정에서 에러가 발생했습니다.",
+      message: '데이터 수집과정에서 에러가 발생했습니다.',
     });
 
   await createOne(content);
@@ -54,7 +53,7 @@ export const deleteToday = () => {
 /* ----------------  ---------------- */
 
 export const collectContent = async () => {
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   const { deletedCount } = await deleteToday();
   console.log(`$$ clean today's ${deletedCount} contents`);
 
@@ -63,6 +62,7 @@ export const collectContent = async () => {
   );
 
   let done = 0;
+  const failMessage = [];
   for (const key of CrawlerService.crawlerKeyList) {
     try {
       const content = await CrawlerService.parse(
@@ -72,20 +72,30 @@ export const collectContent = async () => {
         await createOne(content);
         done++;
       } else {
-        EmailService.sendMail({
-          to: "bepyan@naver.com",
-          subject: "[ Quiet Time ] 성경 본문 취합 실패",
-          html: `${key} 취합 실패`,
-        });
         console.error(`$$ [ ${key} ] fail`);
       }
     } catch (e) {
-      console.error(e);
+      if (e instanceof Error) {
+        failMessage.push({
+          target: key,
+          error: e.stack ?? e.message,
+        });
+      }
     }
+  }
+  if (failMessage.length > 0) {
+    EmailService.sendMail({
+      to: 'bepyan@naver.com',
+      subject: '[ Quiet Time ] 성경 본문 취합 실패',
+      html: `<div>${failMessage.map(
+        (v) => `<h>${v.target} 취합 실패</h>\n${v.error}\n\n\n`
+      )}</div>`,
+    });
   }
 
   console.log(`$$ successfully collect ${done} contents ✨`);
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  return done;
 };
 
 /* ----------------  ---------------- */
@@ -124,8 +134,8 @@ export const publishToOneUser = async (user: IUser) => {
 };
 
 export const publishToAllUser = async () => {
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log("$$ start publishing QT");
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('$$ start publishing QT');
 
   const users = await UserService.findAll();
   const jobs = users.reduce((ac, v) => ac + v.notions.length, 0);
@@ -137,5 +147,5 @@ export const publishToAllUser = async () => {
   }
 
   console.log(`$$ ${jobs_done} content published ✨`);
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 };
