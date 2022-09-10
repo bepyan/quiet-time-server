@@ -2,8 +2,9 @@ import { IQTContent } from '@types';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import iconv from 'iconv-lite';
+import { BrowserService } from '.';
 import { generateError } from '../middlewares';
-import { BrowserService, Time } from '../utils';
+import { Time } from '../utils';
 
 /* ---------------- craw ---------------- */
 
@@ -39,9 +40,7 @@ const crawler = {
 
 const parse생명의삶 = async (link: string): Promise<IQTContent> => {
   const $ = cheerio.load(await getHTML(link, 'euc-kr'));
-  const $commentary = cheerio.load(
-    await getHTML(links.생명의삶_해설, 'euc-kr')
-  );
+  const $commentary = cheerio.load(await getHTML(links.생명의삶_해설, 'euc-kr'));
 
   // 예시
   // 욥기 33 : 1~13
@@ -110,7 +109,7 @@ const load매일성경 = async (key: string) => {
   // 매일성경은 radio input을 누를 필요가 없다.
   if (!selector) return cheerio.load(await getHTML(links.매일성경));
 
-  const page = await BrowserService.매일성경page;
+  const page = await BrowserService.loadBrowser(links.매일성경);
   if (!page) return console.error("$$ can't open browser page");
 
   console.log(`@@ [ ${key} ]으로 이동중...`);
@@ -121,12 +120,12 @@ const load매일성경 = async (key: string) => {
   const content = await page.content();
 
   console.log(`@@ [ ${key} ] 본문 취합완료 ✨`);
+  await page.close();
+
   return cheerio.load(content);
 };
 
-const parse매일성경 = async (
-  contentType: CrawlerKey
-): Promise<IQTContent | undefined> => {
+const parse매일성경 = async (contentType: CrawlerKey): Promise<IQTContent | undefined> => {
   const $ = await load매일성경(contentType);
   if (!$) return;
 
@@ -175,9 +174,7 @@ const parse매일성경 = async (
         .children()
         .map((_, elem) => $(elem).html())
         .toArray()
-        .flatMap((text) =>
-          text.split('<br>').map((v) => v.replace('&amp;', '&').trim())
-        ),
+        .flatMap((text) => text.split('<br>').map((v) => v.replace('&amp;', '&').trim())),
       '',
     ],
   };

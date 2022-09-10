@@ -1,16 +1,15 @@
-import "dotenv/config";
+import 'dotenv/config';
 
-import cors from "cors";
-import express from "express";
-import routers from "./routes";
+import cors from 'cors';
+import express from 'express';
+import routers from './routes';
 import {
   loadDB,
   load_heroku_awaker,
   load_QTContent_collector,
   load_QTConent_publisher,
-} from "./loaders";
-import { errorResponser, errorLogger } from "./middlewares";
-import { BrowserService } from "./utils";
+} from './loaders';
+import { errorResponser, errorLogger } from './middlewares';
 
 const app = express();
 const PORT = process.env.PORT || 1234;
@@ -19,14 +18,14 @@ loadDB();
 load_heroku_awaker();
 load_QTConent_publisher();
 load_QTContent_collector();
-BrowserService.loadBrowser();
+// BrowserService.loadBrowser();
 
 app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/api", routers);
+app.use('/api', routers);
 app.use(errorLogger);
 app.use(errorResponser);
 

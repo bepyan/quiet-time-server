@@ -1,3 +1,4 @@
+export * as BrowserService from "./BrowserService";
 export * as CrawlerService from "./CrawlerService";
 export * as NotionService from "./NotionService";
 export * as QTContentService from "./QTContentService";
