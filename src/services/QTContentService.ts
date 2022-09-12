@@ -1,5 +1,5 @@
 import { IQTContent, SearchQTContentDTO } from '@types';
-import { EmailService } from '.';
+import { DailyBibleService, EmailService, LivingLifeService } from '.';
 import { generateError } from '../middlewares';
 import { QTContentModel } from '../models';
 import { Time } from '../utils';
@@ -54,34 +54,45 @@ export const collectContent = async () => {
   // console.log(`$$ start collect [ ${CrawlerService.crawlerKeyList.length} ] contents`);
 
   let done = 0;
-  const failMessage = [];
-  // for (const key of CrawlerService.crawlerKeyList) {
-  //   try {
-  //     const content = await CrawlerService.parse(key as CrawlerService.CrawlerKey);
-  //     if (content) {
-  //       await createOne(content);
-  //       done++;
-  //     } else {
-  //       console.error(`$$ [ ${key} ] fail`);
-  //     }
-  //   } catch (e) {
-  //     if (e instanceof Error) {
-  //       failMessage.push({
-  //         target: key,
-  //         error: e.stack ?? e.message,
-  //       });
-  //     }
-  //   }
-  // }
-  // if (failMessage.length > 0) {
-  //   EmailService.sendMail({
-  //     to: 'bepyan@naver.com',
-  //     subject: '[ Quiet Time ] 성경 본문 취합 실패',
-  //     html: `<div>${failMessage.map(
-  //       (v) => `<h>${v.target} 취합 실패</h>\n${v.error}\n\n\n`,
-  //     )}</div>`,
-  //   });
-  // }
+  const failMessage: { target: string; error: string }[] = [];
+
+  await Promise.all([
+    ...['기본', '순', '영어'].map(async (v) => {
+      try {
+        const [verses, content] = await Promise.all([
+          DailyBibleService.getDailyBible(),
+          DailyBibleService.getDailyBibleContent(),
+        ]);
+        const data = DailyBibleService.transfer({ verses, content });
+        await createOne(data);
+        done++;
+        console.log(`$$ done --- ${done}`);
+      } catch (e) {
+        if (e instanceof Error) {
+          failMessage.push({
+            target: '매일성경',
+            error: e.stack ?? e.message,
+          });
+        }
+      }
+    }),
+    async () => {
+      const data = await LivingLifeService.parse();
+      await createOne(data);
+      done++;
+      console.log(`$$ done --- ${done}`);
+    },
+  ]);
+
+  if (failMessage.length > 0) {
+    EmailService.sendMail({
+      to: 'bepyan@naver.com',
+      subject: '[ Quiet Time ] 성경 본문 취합 실패',
+      html: `<div>${failMessage.map(
+        (v) => `<h>${v.target} 취합 실패</h>\n${v.error}\n\n\n`,
+      )}</div>`,
+    });
+  }
 
   console.log(`$$ successfully collect ${done} contents ✨`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
