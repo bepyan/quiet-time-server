@@ -7,7 +7,7 @@ import {
   generateError,
   validatorErrorChecker,
 } from '../middlewares';
-import { CrawlerService, PublishService, QTContentService, UserService } from '../services';
+import { PublishService, QTContentService, UserService } from '../services';
 import { Time } from '../utils';
 
 const router = express.Router();
@@ -26,7 +26,7 @@ router.get(
 
 router.get(
   '/:contentType',
-  param('contentType').notEmpty().isIn(CrawlerService.crawlerKeyList),
+  // param('contentType').notEmpty().isIn(CrawlerService.crawlerKeyList),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { contentType } = req.params;

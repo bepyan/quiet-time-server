@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { body, param } from 'express-validator';
 import { asyncErrorCatcher, generateError, validatorErrorChecker } from '../middlewares';
-import { CrawlerService, NotionService, QTContentService, UserService } from '../services';
+import { NotionService, QTContentService, UserService } from '../services';
 
 /* ---------------- GET ---------------- */
 
@@ -35,7 +35,7 @@ export const create: RequestHandler[] = [
 export const createNotion: RequestHandler[] = [
   param('name').notEmpty(),
   body('page_id').notEmpty(),
-  body('contentType').isIn(CrawlerService.crawlerKeyList),
+  // body('contentType').isIn(CrawlerService.crawlerKeyList),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { name } = req.params;

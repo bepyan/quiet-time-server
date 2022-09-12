@@ -8,7 +8,7 @@ const router = express.Router();
 router.use('/', decodeRequest);
 
 router.get(
-  '/매일성경',
+  '/',
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const date = req.query.date?.toString() ?? new Date();

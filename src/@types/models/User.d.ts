@@ -1,7 +1,5 @@
-import { CrawlerKey } from '../../services/CrawlerService';
-
 declare module '@types' {
-  type ContentType = CrawlerKey;
+  type ContentType = '생명의삶' | '매일성경';
 
   /* ---------------- DTO ---------------- */
   interface UserDTO {
