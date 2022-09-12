@@ -19,10 +19,7 @@ router.get(
       DailyBibleService.getDailyBibleContent({ bibleType, date }),
     ]);
 
-    res.send({
-      ...content,
-      verses,
-    });
+    res.send(DailyBibleService.transfer({ verses, content }));
   }),
 );
 

@@ -1,5 +1,7 @@
+import { IQTContent } from '@types';
 import axios, { AxiosInstance } from 'axios';
 import moment from 'moment-timezone';
+import { Time } from '../utils';
 
 const DAILY_BIBLE_API_URL = 'https://sum.su.or.kr:8888/Ajax/Bible';
 
@@ -99,4 +101,42 @@ export const getDailyBibleContent = async ({
   });
 
   return data;
+};
+
+export const transfer = ({
+  verses,
+  content,
+}: {
+  verses: TDailyBible[];
+  content: TDailyBibleContent;
+}): IQTContent => {
+  const [start, end] = content.Bible_chapter.split(' - ');
+  const [startCapter, startVerse] = start.split(':').map((v) => +v);
+  const [endCapter, endVerse] = end.split(':').map((v) => +v);
+
+  return {
+    contentType: '매일성경',
+    title: content.Qt_sj,
+    range: {
+      text: `${content.Bible_name} ${content.Bible_chapter}`,
+      book: content.Bible_name,
+      start: { capter: startCapter, verse: startVerse },
+      end: { caper: endCapter, verse: endVerse },
+    },
+    date: Time.toYMD(),
+    verses: verses.map((verse) => {
+      return {
+        capter: verse.Chapter,
+        verse: verse.Verse,
+        text: verse.Bible_Cn.trim(),
+      };
+    }),
+    commentaries: [
+      content.Qt_Brf,
+      content.Qt_a1,
+      content.Qt_a2,
+      content.Qt_a3,
+      content.Qt_a4,
+    ].filter((v) => !!v),
+  };
 };
