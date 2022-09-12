@@ -18,7 +18,6 @@ loadDB();
 load_heroku_awaker();
 load_QTConent_publisher();
 load_QTContent_collector();
-// BrowserService.loadBrowser();
 
 app.use(cors());
 
