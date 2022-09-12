@@ -3,6 +3,11 @@ import moment from 'moment-timezone';
 
 const DAILY_BIBLE_API_URL = 'https://sum.su.or.kr:8888/Ajax/Bible';
 
+export const _axios: AxiosInstance = axios.create({
+  baseURL: DAILY_BIBLE_API_URL,
+  timeout: 10000,
+});
+
 const BIBLE_TYPE_MAPPER = {
   기본: 'QT1',
   영어: 'QT4',
@@ -17,11 +22,6 @@ const BIBLE_TYPE_MAPPER = {
 };
 
 export type TBibleType = keyof typeof BIBLE_TYPE_MAPPER;
-
-export const _axios: AxiosInstance = axios.create({
-  baseURL: DAILY_BIBLE_API_URL,
-  timeout: 10000,
-});
 
 /* ---------------- 본문 ---------------- */
 

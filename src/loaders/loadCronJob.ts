@@ -1,6 +1,6 @@
 import axios from 'axios';
 import schedule from 'node-schedule';
-import { QTContentService } from '../services';
+import { PublishService, QTContentService } from '../services';
 
 // https://github.com/node-schedule/node-schedule#cron-style-scheduling
 
@@ -24,7 +24,7 @@ export const load_QTConent_publisher = () => {
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.tz = 'Asia/Seoul';
 
-  schedule.scheduleJob(rule, QTContentService.publishToAllUser);
+  schedule.scheduleJob(rule, PublishService.publishToAllUser);
 };
 
 export const load_QTContent_collector = () => {

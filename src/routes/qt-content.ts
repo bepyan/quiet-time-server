@@ -7,7 +7,7 @@ import {
   generateError,
   validatorErrorChecker,
 } from '../middlewares';
-import { CrawlerService, QTContentService, UserService } from '../services';
+import { CrawlerService, PublishService, QTContentService, UserService } from '../services';
 import { Time } from '../utils';
 
 const router = express.Router();
@@ -63,7 +63,7 @@ router.post(
         message: '해당 유저를 찾을 수 없습니다.',
       });
 
-    const job_done = await QTContentService.publishToOneUser(user);
+    const job_done = await PublishService.publishToOneUser(user);
     res.json({ job_done });
   }),
 );
