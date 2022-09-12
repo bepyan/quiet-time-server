@@ -100,7 +100,13 @@ export const getDailyBibleContent = async ({
     Bibletype: '1',
   });
 
-  return data;
+  return {
+    ...data,
+    Qt_Brf: data.Qt_Brf.replace(/<br>/g, '\n'),
+    Qt_a1: data.Qt_a1.replace(/<br>/g, '\n'),
+    Qt_a2: data.Qt_a2.replace(/<br>/g, '\n'),
+    Qt_a3: data.Qt_a3.replace(/<br>/g, '\n'),
+  };
 };
 
 export const transfer = ({
@@ -133,10 +139,12 @@ export const transfer = ({
     }),
     commentaries: [
       content.Qt_Brf,
+      content.Qt_q1_str,
       content.Qt_a1,
+      content.Qt_q2_str,
       content.Qt_a2,
+      content.Qt_q3_str,
       content.Qt_a3,
-      content.Qt_a4,
     ].filter((v) => !!v),
   };
 };
