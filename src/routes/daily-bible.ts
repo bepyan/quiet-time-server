@@ -16,7 +16,7 @@ router.get(
 
     const [verses, content] = await Promise.all([
       DailyBibleService.getDailyBible({ bibleType, date }),
-      DailyBibleService.getDaliyBibleContent({ bibleType, date }),
+      DailyBibleService.getDailyBibleContent({ bibleType, date }),
     ]);
 
     res.send({

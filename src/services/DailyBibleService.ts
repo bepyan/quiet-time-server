@@ -54,7 +54,7 @@ export const getDailyBible = async ({
 
 /* ---------------- 해설 ---------------- */
 
-type TDaliyBibleContent = {
+type TDailyBibleContent = {
   Base_de: string; // '2022-09-12'
   Bible_chapter: string; // '5:8 - 5:14'
   Bible_name: string; // '에베소서(Ephesians)'
@@ -85,14 +85,14 @@ type TDaliyBibleContent = {
   Speaker: string; // '김동주 목사'
 };
 
-export const getDaliyBibleContent = async ({
+export const getDailyBibleContent = async ({
   bibleType = '기본',
   date = new Date(),
 }: {
   bibleType?: TBibleType;
   date?: string | Date;
 } = {}) => {
-  const { data } = await _axios.post<TDaliyBibleContent>('/BodyBibleCont', {
+  const { data } = await _axios.post<TDailyBibleContent>('/BodyBibleCont', {
     qt_ty: BIBLE_TYPE_MAPPER[bibleType],
     Base_de: moment(new Date(date)).format('yyyy-MM-DD'),
     Bibletype: '1',
