@@ -1,25 +1,22 @@
-import moment from "moment-timezone";
-import "moment/locale/ko";
+import moment from 'moment-timezone';
+import 'moment/locale/ko';
 
 type DateValue = string | Date | number;
 
-const KO_DAY = ["일", "월", "화", "수", "목", "금", "토"];
+const KO_DAY = ['일', '월', '화', '수', '목', '금', '토'];
 
 /**
  * @param target string | number | Date  `default` 오늘
  * @returns 2021-08-16
  */
 export const toYMD = (target: DateValue = new Date()) => {
-  return moment(target).tz("Asia/Seoul").format("YYYY-MM-DD");
+  return moment(target).tz('Asia/Seoul').format('YYYY-MM-DD');
 };
 
 export const toYMDD = (target: DateValue = new Date()) => {
-  return moment(target).tz("Asia/Seoul").format("YYYY년 MM월 DD일 dddd");
+  return moment(target).tz('Asia/Seoul').format('YYYY년 MM월 DD일 dddd');
 };
 
 export const toYesterday = (target: DateValue = new Date()) => {
-  return moment(target)
-    .tz("Asia/Seoul")
-    .subtract(1, "days")
-    .format("YYYY-MM-DD");
+  return moment(target).tz('Asia/Seoul').subtract(1, 'days').format('YYYY-MM-DD');
 };

@@ -1,2 +1,2 @@
-export * from "./User";
-export * from "./QTContent"
+export * from './User';
+export * from './QTContent';

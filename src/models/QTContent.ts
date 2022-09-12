@@ -1,8 +1,8 @@
-import { IQTContent } from "@types";
-import mongoose from "mongoose";
+import { IQTContent } from '@types';
+import mongoose from 'mongoose';
 
 export const QTContentModel = mongoose.model<IQTContent>(
-  "QTContent",
+  'QTContent',
   new mongoose.Schema({
     contentType: { type: String, required: true },
     title: { type: String, required: true },
@@ -21,5 +21,5 @@ export const QTContentModel = mongoose.model<IQTContent>(
         text: { type: String, required: true },
       },
     ],
-  })
+  }),
 );

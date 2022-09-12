@@ -1,8 +1,8 @@
-import { IUser } from "@types";
-import mongoose from "mongoose";
+import { IUser } from '@types';
+import mongoose from 'mongoose';
 
 export const UserModel = mongoose.model<IUser>(
-  "User",
+  'User',
   new mongoose.Schema({
     name: { type: String, required: true },
     notion_auth: { type: String, required: true },
@@ -15,5 +15,5 @@ export const UserModel = mongoose.model<IUser>(
       },
     ],
     create_date: { type: Date, default: Date.now },
-  })
+  }),
 );

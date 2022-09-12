@@ -21,7 +21,7 @@ router.get(
   asyncErrorCatcher(async (req, res) => {
     const content = await QTContentService.findAll();
     res.send(content);
-  })
+  }),
 );
 
 router.get(
@@ -37,7 +37,7 @@ router.get(
       date,
     } as SearchQTContentDTO);
     res.send(content);
-  })
+  }),
 );
 
 /* ---------------- post ---------------- */
@@ -47,7 +47,7 @@ router.post(
   asyncErrorCatcher(async (req, res) => {
     const done = await QTContentService.collectContent();
     res.json({ message: 'done', cnt: done });
-  })
+  }),
 );
 
 router.post(
@@ -65,7 +65,7 @@ router.post(
 
     const job_done = await QTContentService.publishToOneUser(user);
     res.json({ job_done });
-  })
+  }),
 );
 
 /* ---------------- delete ---------------- */
@@ -75,7 +75,7 @@ router.delete(
   asyncErrorCatcher(async (req, res) => {
     const result = await QTContentService.deleteToday();
     return res.send(result);
-  })
+  }),
 );
 
 export default router;

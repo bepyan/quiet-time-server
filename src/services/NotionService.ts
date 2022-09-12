@@ -1,16 +1,13 @@
-import { Client } from "@notionhq/client";
-import { NotionDatabaseDTO, NotionPageDTO } from "@types";
-import { Time } from "../utils";
+import { Client } from '@notionhq/client';
+import { NotionDatabaseDTO, NotionPageDTO } from '@types';
+import { Time } from '../utils';
 
-export const createQTDatabase = async ({
-  notion_auth,
-  page_id,
-}: NotionDatabaseDTO) => {
+export const createQTDatabase = async ({ notion_auth, page_id }: NotionDatabaseDTO) => {
   const notion = new Client({ auth: notion_auth });
 
   const data = await notion.databases.create({
     parent: { page_id },
-    icon: { emoji: "📖" },
+    icon: { emoji: '📖' },
     title: [{ text: { content: `QT 말씀` } }],
     properties: {
       title: { title: {} },
@@ -22,16 +19,12 @@ export const createQTDatabase = async ({
   return data;
 };
 
-export const createQTPage = async ({
-  notion_auth,
-  database_id,
-  content,
-}: NotionPageDTO) => {
+export const createQTPage = async ({ notion_auth, database_id, content }: NotionPageDTO) => {
   const notion = new Client({ auth: notion_auth });
 
   return notion.pages.create({
     parent: { database_id },
-    icon: { emoji: "🤲🏻" },
+    icon: { emoji: '🤲🏻' },
     properties: {
       title: { title: [{ text: { content: content.range.text } }] },
       큐티책: { rich_text: [{ text: { content: content.contentType } }] },
@@ -70,13 +63,13 @@ export const createQTPage = async ({
       { divider: {} },
       {
         toggle: {
-          text: [{ text: { content: "본문해설" } }],
+          text: [{ text: { content: '본문해설' } }],
           children: [
             { divider: {} },
             ...content.commentaries.map((text) =>
               2 < text.length && text.length < 30
                 ? { heading_3: { text: [{ text: { content: text } }] } }
-                : { paragraph: { text: [{ text: { content: text } }] } }
+                : { paragraph: { text: [{ text: { content: text } }] } },
             ),
           ],
         },

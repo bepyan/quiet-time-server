@@ -8,10 +8,7 @@ export const findAll = () => {
   return QTContentModel.find();
 };
 
-export const findOne = async ({
-  contentType,
-  date = Time.toYMD(),
-}: SearchQTContentDTO) => {
+export const findOne = async ({ contentType, date = Time.toYMD() }: SearchQTContentDTO) => {
   const databaseContent: IQTContent | null = await QTContentModel.findOne({
     contentType,
     date,
@@ -25,10 +22,7 @@ export const findOne = async ({
 
   const content = await CrawlerService.parse(contentType);
 
-  if (
-    !content ||
-    (yesterdayContent && content.title === yesterdayContent.title)
-  )
+  if (!content || (yesterdayContent && content.title === yesterdayContent.title))
     throw generateError({
       status: 500,
       message: '데이터 수집과정에서 에러가 발생했습니다.',
@@ -57,17 +51,13 @@ export const collectContent = async () => {
   const { deletedCount } = await deleteToday();
   console.log(`$$ clean today's ${deletedCount} contents`);
 
-  console.log(
-    `$$ start collect [ ${CrawlerService.crawlerKeyList.length} ] contents`
-  );
+  console.log(`$$ start collect [ ${CrawlerService.crawlerKeyList.length} ] contents`);
 
   let done = 0;
   const failMessage = [];
   for (const key of CrawlerService.crawlerKeyList) {
     try {
-      const content = await CrawlerService.parse(
-        key as CrawlerService.CrawlerKey
-      );
+      const content = await CrawlerService.parse(key as CrawlerService.CrawlerKey);
       if (content) {
         await createOne(content);
         done++;
@@ -88,7 +78,7 @@ export const collectContent = async () => {
       to: 'bepyan@naver.com',
       subject: '[ Quiet Time ] 성경 본문 취합 실패',
       html: `<div>${failMessage.map(
-        (v) => `<h>${v.target} 취합 실패</h>\n${v.error}\n\n\n`
+        (v) => `<h>${v.target} 취합 실패</h>\n${v.error}\n\n\n`,
       )}</div>`,
     });
   }

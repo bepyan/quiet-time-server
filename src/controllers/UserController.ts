@@ -1,16 +1,7 @@
-import { RequestHandler } from "express";
-import { body, param } from "express-validator";
-import {
-  asyncErrorCatcher,
-  generateError,
-  validatorErrorChecker,
-} from "../middlewares";
-import {
-  CrawlerService,
-  NotionService,
-  QTContentService,
-  UserService,
-} from "../services";
+import { RequestHandler } from 'express';
+import { body, param } from 'express-validator';
+import { asyncErrorCatcher, generateError, validatorErrorChecker } from '../middlewares';
+import { CrawlerService, NotionService, QTContentService, UserService } from '../services';
 
 /* ---------------- GET ---------------- */
 
@@ -20,7 +11,7 @@ export const findAll: RequestHandler = async (req, res) => {
 };
 
 export const findOne: RequestHandler[] = [
-  param("name").notEmpty(),
+  param('name').notEmpty(),
   validatorErrorChecker,
   async (req, res) => {
     const data = await UserService.findUser({ name: req.params.name });
@@ -31,8 +22,8 @@ export const findOne: RequestHandler[] = [
 /* ---------------- POST ---------------- */
 
 export const create: RequestHandler[] = [
-  body("name").notEmpty(),
-  body("notion_auth").notEmpty(),
+  body('name').notEmpty(),
+  body('notion_auth').notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { name, notion_auth } = req.body;
@@ -42,9 +33,9 @@ export const create: RequestHandler[] = [
 ];
 
 export const createNotion: RequestHandler[] = [
-  param("name").notEmpty(),
-  body("page_id").notEmpty(),
-  body("contentType").isIn(CrawlerService.crawlerKeyList),
+  param('name').notEmpty(),
+  body('page_id').notEmpty(),
+  body('contentType').isIn(CrawlerService.crawlerKeyList),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { name } = req.params;
@@ -54,7 +45,7 @@ export const createNotion: RequestHandler[] = [
     if (!user)
       return generateError({
         status: 400,
-        message: "일치된 사용자가 없습니다.",
+        message: '일치된 사용자가 없습니다.',
       });
     const { notion_auth } = user;
 
@@ -69,7 +60,7 @@ export const createNotion: RequestHandler[] = [
     if (!content)
       return generateError({
         status: 500,
-        message: "큐티본문 취득 실패..",
+        message: '큐티본문 취득 실패..',
       });
 
     // 노션 페이지 생성
@@ -89,15 +80,15 @@ export const createNotion: RequestHandler[] = [
 ];
 
 export const subscriptNotion: RequestHandler[] = [
-  param("name").notEmpty(),
-  body("notion").notEmpty(),
+  param('name').notEmpty(),
+  body('notion').notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { name } = req.params;
     const { notion } = req.body;
     //  중복된 구독이면 에러
     if (await UserService.hasSubscript({ name, notion })) {
-      generateError({ status: 400, message: "중복된 구독정보가 있습니다." });
+      generateError({ status: 400, message: '중복된 구독정보가 있습니다.' });
       return;
     }
 
@@ -107,8 +98,8 @@ export const subscriptNotion: RequestHandler[] = [
 ];
 
 export const unSubscriptNotion: RequestHandler[] = [
-  param("name").notEmpty(),
-  body("notion").notEmpty(),
+  param('name').notEmpty(),
+  body('notion').notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const { name } = req.params;
@@ -123,7 +114,7 @@ export const unSubscriptNotion: RequestHandler[] = [
 /* ---------------- DELETE ---------------- */
 
 export const deleteUser: RequestHandler[] = [
-  body("name").notEmpty(),
+  body('name').notEmpty(),
   validatorErrorChecker,
   asyncErrorCatcher(async (req, res) => {
     const user = await UserService.deleteUser(req.body.name);

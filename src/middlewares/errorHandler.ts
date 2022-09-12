@@ -1,19 +1,13 @@
-import {
-  ErrorRequestHandler,
-  RequestHandler,
-  Request,
-  Response,
-  NextFunction,
-} from "express";
+import { ErrorRequestHandler, RequestHandler, Request, Response, NextFunction } from 'express';
 
 const DEFAULT_HTTP_STATUS_MESSAGES = {
-  400: "Bad Requests",
-  401: "Unauthorized",
-  403: "Foribdden",
-  404: "Not Found",
-  409: "duplicate",
-  500: "Internal Server Error",
-  503: "Temporary Unavailable",
+  400: 'Bad Requests',
+  401: 'Unauthorized',
+  403: 'Foribdden',
+  404: 'Not Found',
+  409: 'duplicate',
+  500: 'Internal Server Error',
+  503: 'Temporary Unavailable',
 };
 
 export type StatusType = keyof typeof DEFAULT_HTTP_STATUS_MESSAGES;
@@ -23,21 +17,19 @@ export interface ErrorWithStatus extends Error {
 }
 
 export const generateError = ({
-  message = "",
+  message = '',
   status = 500,
 }: {
   message: string;
   status: StatusType;
 }) => {
-  const error: ErrorWithStatus = new Error(
-    message || DEFAULT_HTTP_STATUS_MESSAGES[status]
-  );
+  const error: ErrorWithStatus = new Error(message || DEFAULT_HTTP_STATUS_MESSAGES[status]);
   error.status = status;
   throw error;
 };
 
 export const errorLogger: ErrorRequestHandler = (err, req, res, next) => {
-  if (err.status >= 500) console.error("\n", err.stack, "\n");
+  if (err.status >= 500) console.error('\n', err.stack, '\n');
   next(err);
 };
 
@@ -47,8 +39,7 @@ export const errorResponser: ErrorRequestHandler = (err, req, res, next) => {
 };
 
 export const asyncErrorCatcher =
-  (fn: RequestHandler) =>
-  async (req: Request, res: Response, next: NextFunction) => {
+  (fn: RequestHandler) => async (req: Request, res: Response, next: NextFunction) => {
     try {
       await fn(req, res, next);
     } catch (e: any) {

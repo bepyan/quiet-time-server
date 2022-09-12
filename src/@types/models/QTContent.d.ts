@@ -1,4 +1,4 @@
-declare module "@types" {
+declare module '@types' {
   interface IQTContent {
     contentType: ContentType;
     title: string;

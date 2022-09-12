@@ -1,6 +1,6 @@
-import { CrawlerKey } from "../../services/CrawlerService";
+import { CrawlerKey } from '../../services/CrawlerService';
 
-declare module "@types" {
+declare module '@types' {
   type ContentType = CrawlerKey;
 
   /* ---------------- DTO ---------------- */

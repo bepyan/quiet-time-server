@@ -1,6 +1,6 @@
-import { RequestHandler } from "express";
-import { validationResult } from "express-validator";
-import { generateError } from "./errorHandler";
+import { RequestHandler } from 'express';
+import { validationResult } from 'express-validator';
+import { generateError } from './errorHandler';
 
 export const validatorErrorChecker: RequestHandler = (req, res, next) => {
   const errors = validationResult(req);
@@ -11,7 +11,7 @@ export const validatorErrorChecker: RequestHandler = (req, res, next) => {
       message: errors
         .array()
         .map((v) => v.msg)
-        .join(", "),
+        .join(', '),
     });
     return;
   }
