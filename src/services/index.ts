@@ -1,4 +1,4 @@
-export * as BrowserService from './BrowserService';
+// export * as BrowserService from './BrowserService';
 export * as DailyBibleService from './DailyBibleService';
 export * as LivingLifeService from './LivingLifeService';
 export * as NotionService from './NotionService';
